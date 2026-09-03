@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="3sX6uuMrUYO50nDXknFllz">
+<head data-page-node-id="Tv39hqCGNiAXLGTNievmkh">
+<meta charset="UTF-8" data-page-node-id="vFXTUXchSDBCXUyrxtcNpY">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="S2iSJABc6OIiiJvgMu9bXD">
+<title>一分钟掌握 Agent Skill · 分层自适应学习</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:880px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb 60%,#3b82f6);color:#fff;border-radius:16px;padding:22px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.94;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:6px 0 6px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src a:hover{text-decoration:underline}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eef2ff;color:#4338ca;padding:1px 5px;border-radius:4px;font-size:12.5px}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 14px;border-radius:999px;color:#fff;font-size:13px}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:4px}
+  .qlv{font-size:11.5px;color:var(--muted);margin-bottom:10px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff;transition:.12s}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:12px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534;border:1px solid #bbf7d0}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b;border:1px solid #fecaca}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:hover{opacity:.9}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center;display:none}
+  .card-big h3{font-size:19px}
+  .stat{color:var(--muted);font-size:13.5px;margin-top:10px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:700}
+</style>
+</head>
+<body data-page-node-id="m5yOcW1Q796byZY0wiJItm">
+<div class="wrap" data-page-node-id="23Woc8mstWNlaDwbkoY7dH">
+
+<header data-page-node-id="dtthA1BWGuHZZ6iJj8KTO5">
+  <h1 data-page-node-id="Trv37VV7jbhw9GjM2N9Sdx">Agent Skill · 一分钟掌握（分层自适应版）</h1>
+  <div class="sub" data-page-node-id="9aKFzahODhMUv8DD4SUUVh">把专业任务的"做法"沉淀为可复用技能包 —— 看懂核心、再经分层测评，答对升级、答错降级，始终在"够得着"的难度练习。</div>
+  <div class="badges" data-page-node-id="yX92uZ9rcoTYRvZGBo4q9a"><span data-page-node-id="iDdqMjbAf68oKIT9dchvXb">⏱ 阅读约 60 秒</span><span data-page-node-id="itUD33ofCYqed9leSZZd6b">📚 权威来源已标注</span><span data-page-node-id="JwbmXKzZ2CHcZJW6yjvPDq">🎯 三层自适应测评</span></div>
+</header>
+
+<!-- ============ 来源 Sources ============ -->
+<h2 data-page-node-id="dWVRDrHelxVcOVC3e26CRA">📚 来源 Sources（本材料的出处）</h2>
+<div class="src" data-page-node-id="D1e0qeer3n0ScSUAfYUxfL">
+  <h3 data-page-node-id="0jBOeBFEVLRGFKMrNRGqbI">以下知识点出自权威来源：</h3>
+  <ul id="srcList" data-page-node-id="Y21BSoiExDFNLmPgRIEGAd"></ul>
+</div>
+
+<!-- ============ 核心要点 ============ -->
+<h2 data-page-node-id="78OQ444TnbHjVYMnul9fGI">① 核心要点（附来源标签 ①②）</h2>
+<div id="points" data-page-node-id="WPaDIrxJ7iGyJc8VFwLIb5"></div>
+
+<!-- ============ 分层测验 ============ -->
+<h2 data-page-node-id="f3gFgfiCDLMbTY0toeaVkn">② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage" data-page-node-id="F8wA8XRYKWD3QbZ8V9diXk">
+  <span style="font-size:14px;font-weight:600" data-page-node-id="QvGM94jaVXaTC7EZ6pho9M">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy" data-page-node-id="DHUi9QpDETdcIbUSFOf3xF">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress" data-page-node-id="42ZAcvqs16DJ9wpnvmRupP"></span>
+</div>
+<div id="quizArea" data-page-node-id="bKYWJ8UlpIldvZhgjrSi55"></div>
+
+<div class="card-big" id="doneCard" data-page-node-id="0RSGQAjfsPFtrBWoPnZvCX">
+  <h3 id="doneTitle" data-page-node-id="fWC1yZfNiufwcAoMUDnAVl"></h3>
+  <p id="doneMsg" class="stat" data-page-node-id="3BIdxuCyBy5Os76ujG3Pn8"></p>
+  <div style="margin-top:16px" data-page-node-id="G26X6iSUHvEsFMo6mtvZ1U">
+    <button class="btn" onclick="resetQuiz()" data-page-node-id="u9WL4Mh83JoQeoKACFA6MZ">再来一轮</button>
+    <button class="btn" style="background:#0f172a;margin-left:8px" onclick="scrollToSources()" data-page-node-id="8ebt2kyNMuK00GUUnmbITS">回看来源</button>
+  </div>
+</div>
+
+<footer data-page-node-id="x830LIWnEPLDpOvPEVmyh0">大数据与人工智能课程 · BigData-AI/notes · 由「分层学习测评」技能生成 · 2026-09-03</footer>
+</div>
+
+<script>
+/* ============ 数据区：Agent Skill 主题 ============ */
+const CONFIG={
+  sources:[
+    {name:"WorkBuddy 官方文档 · Skills（技能）", why:"本工具（WorkBuddy）第一手官方文档，定义 SKILL.md 结构、三类资源与渐进式加载", url:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+    {name:"Anthropic · Announcing Skills", why:"Agent Skills 概念的官方开创性发布，说明技能如何让模型掌握工具式能力并泛化", url:"https://www.anthropic.com/news/skills"}
+  ],
+  points:[
+    "Agent Skill（技能）是把「何时触发 + 按什么步骤做」写进一个 <code>SKILL.md</code> 的能力包，让通用 Agent 变成某个领域的专家。〔来源①〕",
+    "结构：必备 <code>SKILL.md</code>（frontmatter 含 name + description），可选 <code>scripts/</code>（可执行代码）、<code>references/</code>（按需读取的资料）、<code>assets/</code>（输出用模板资源）。〔来源①〕",
+    "渐进式加载：name/description 常驻上下文 → 触发后才读 SKILL.md 正文 → 需要时再取 references，省上下文。〔来源①〕",
+    "Skills 的价值 = 复用专业工作流 + 工具集成 + 领域知识 + 打包资源，把重复任务固化成一句话就能调用。〔来源①〕",
+    "「技能」与「对话/提示词」的本质区别：技能被结构化为模型可主动调用、可版本化、可跨对话积累的模块，模型能把它像工具一样按需使用。〔来源②〕",
+    "用好技能的纪律：技能与需求匹配才触发；加载后按指令执行不自行发挥；用后复盘，发现过时立即修正（技能是可进化的资产）。〔来源①②〕"
+  ],
+  levels:{
+    easy:[
+      {q:"Agent Skill 的核心必需文件是哪一个？", opts:["SKILL.md","scripts/main.py","references/data.md","assets/logo.png"], ans:0,
+        exp:"技能由必备的 SKILL.md（含 name+description 的 frontmatter 与指令）定义；scripts/references/assets 均为可选。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+      {q:"SKILL.md 开头的 YAML frontmatter 必须包含哪两个字段？", opts:["author 与 date","name 与 description","version 与 license","title 与 tags"], ans:1,
+        exp:"name 和 description 决定 Agent 何时会调用这个技能，是触发的关键。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+      {q:"references/ 目录的资料主要如何被使用？", opts:["每次都强制读入主上下文","按需加载，只在需要时进入上下文","必须联网才能读取","仅用于展示给用户下载"], ans:1,
+        exp:"references 旨在「根据需要加载到上下文」，避免无关资料长期占用有限的上下文窗口。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"}
+    ],
+    medium:[
+      {q:"「渐进式加载」的正确顺序是？", opts:["SKILL.md→frontmatter→references","assets→scripts→references","frontmatter(常驻)→触发读SKILL.md→按需取references","全部一次载入"], ans:2,
+        exp:"三档加载：元数据常驻 → SKILL.md 正文(触发时) → 打包资源(按需)，最大化上下文效率。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+      {q:"以下哪个最能体现 Skill「可复用」的价值？", opts:["同一套步骤写进多个对话里手动复制","把专业流程固化为技能，一句话即可调用且跨会话复用","每次让 Agent 自由发挥更灵活","把资料全放进主提示词"], ans:1,
+        exp:"Skill 把「怎么做专业」沉淀下来，避免每次从零开始，从而可复用、可共享、可进化。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+      {q:"使用某技能时发现其指令已经过时、会误导任务，正确的做法是？", opts:["忽略，继续硬用","自己悄悄改流程但不动技能","当场修正技能本身并记录下来，防其持续误导","删掉整个技能目录重装"], ans:2,
+        exp:"应修正技能而非绕开——否则错误会反复出现。技能是可进化的资产，用后需复盘修正。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"}
+    ],
+    hard:[
+      {q:"Skills 与「普通提示词/角色扮演」的本质区别是？", opts:["没有区别","技能被结构化为模型可主动调用、可版本化、可跨对话积累的模块","提示词更长","技能只能给非技术人员用"], ans:1,
+        exp:"核心在「可调用 + 结构化 + 可积累」：模型能像调用工具一样按需使用技能，并跨会话复用与改进。", src:"https://www.anthropic.com/news/skills"},
+      {q:"一个技能文件夹里同时需要放 10MB 的参考 PDF 和 50 行可执行脚本，最佳组织是？", opts:["全放根目录","PDF 放 references/，脚本放 scripts/，模板放 assets/","全放 scripts/","只保留 PDF"], ans:1,
+        exp:"按类型分目录：references 存资料、scripts 存可执行代码、assets 存输出用模板/资源，职责清晰、按需加载。", src:"https://www.workbuddy.cn/docs/ide/Features/Skills"},
+      {q:"关于 Agent Skills 的核心理念（据 Anthropic 发布），以下哪项说法正确？", opts:["技能会泄露给其他用户","模型把技能当作可调用的能力模块，从而获得更强、更可控的表现","技能只能在联网时生效","技能与安全无关"], ans:1,
+        exp:"Anthropic 强调技能作为结构化的能力单元，让模型在受控范围内调用，兼顾能力与安全；不是仅靠模型「临时想」来做。", src:"https://www.anthropic.com/news/skills"}
+    ]
+  }
+};
+
+/* ============ 自适应路由引擎 ============ */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+let level="easy",used={easy:[],medium:[],hard:[]},total=0,right=0,hardStreak=0,mastered=false,curQ=null;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><strong>[来源${"①②③"[i]||(i+1)}]</strong> ${s.name}<br>
+       <span class="why">权威性：${s.why}</span><br>
+       <a href="${s.url}" target="_blank" rel="noopener">${s.url}</a></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>`<div class="pt">${p}</div>`).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  const p=pool(level);
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const L={easy:"基础层",medium:"进阶层",hard:"挑战层"};
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="qlv">〔本层：${L[level]} · 答对升一级，答错降一级〕</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${"ABCD"[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="advance()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  if(el.parentElement.querySelector("input"))return;
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>o.style.pointerEvents="none");
+  const correct=(i===curQ.ans);
+  const fb=document.getElementById("fb");
+  document.querySelectorAll(".opt").forEach(o=>{if(o.dataset.i==curQ.ans)o.classList.add("ok");});
+  if(correct){
+    right++; el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对，难度升级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no"); hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错，难度降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy") fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+  }
+  setBadge(); updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  if(mastered){nb.textContent="查看结果 →";nb.onclick=finish;}
+  else if(pool(level).length===0){nb.textContent="收尾 →";nb.onclick=finish;}
+}
+function advance(){if(mastered)finish();else askStored();}
+function updateProgress(){document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;}
+function finish(){
+  document.getElementById("doneCard").style.display="block";
+  document.getElementById("doneTitle").textContent=mastered?"🎯 掌握达成 · 最高层级「挑战」":"本轮结束 · 最高层级「"+LNAME[level]+"」";
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对自动升级、答错降级回看——你已在合适难度完成练习。建议回看来源后再来一轮，直到稳定冲到「挑战」。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>
