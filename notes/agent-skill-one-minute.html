@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="GxTqwumrd8JjC5C7yJdk1m">
+<head data-page-node-id="JDgcKfWIAmjozBhCCLPQF2">
+<meta charset="UTF-8" data-page-node-id="c1uWyDyJ8nh2Fugd0sViah">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="YDHrmiDsCV7cs0C371KdQX">
+<title>一分钟掌握 Agent Skill</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
+    --accent:#2563eb; --accent-soft:#eff6ff; --ok:#16a34a; --ok-soft:#f0fdf4;
+    --no:#dc2626; --no-soft:#fef2f2; --amber:#d97706; --amber-soft:#fffbeb;
+    --line:#e5e7eb;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif; line-height:1.6; padding:24px;}
+  .wrap{max-width:820px; margin:0 auto;}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb 60%,#3b82f6); color:#fff; border-radius:16px; padding:22px 24px; margin-bottom:18px;}
+  header h1{font-size:24px; font-weight:700; letter-spacing:.5px;}
+  header p{opacity:.92; font-size:14px; margin-top:4px;}
+  .meta{display:flex; gap:12px; flex-wrap:wrap; margin-top:12px;}
+  .meta span{background:rgba(255,255,255,.18); padding:3px 10px; border-radius:999px; font-size:12px;}
+  h2{font-size:17px; margin:26px 0 10px; padding-left:10px; border-left:4px solid var(--accent);}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px;}
+  .card{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .card h3{font-size:14px; color:var(--accent); margin-bottom:6px;}
+  .card ul{list-style:none;}
+  .card li{font-size:13px; color:#374151; padding-left:16px; position:relative; margin-bottom:4px;}
+  .card li::before{content:"▸"; position:absolute; left:0; color:var(--accent);}
+  .flow{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px; text-align:center;}
+  .steps{display:flex; align-items:stretch; justify-content:center; gap:0; flex-wrap:wrap;}
+  .step{flex:1; min-width:130px; padding:10px 8px;}
+  .step .num{width:26px; height:26px; border-radius:50%; background:var(--accent); color:#fff; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:13px;}
+  .step p{font-size:12.5px; color:#374151; margin-top:6px; font-weight:600;}
+  .step small{font-size:11.5px; color:var(--muted); display:block; margin-top:2px;}
+  .arrow{align-self:center; color:var(--accent); font-size:20px; padding:0 6px;}
+  code{background:var(--accent-soft); color:#1d4ed8; padding:1px 6px; border-radius:4px; font-size:13px; font-family:"SF Mono",Menlo,Consolas,monospace;}
+  pre{background:#0f172a; color:#e2e8f0; padding:12px 14px; border-radius:10px; font-size:12.5px; overflow-x:auto; line-height:1.7; font-family:"SF Mono",Menlo,Consolas,monospace;}
+  pre .cm{color:#64748b;}
+  .pills{display:flex; flex-wrap:wrap; gap:8px;}
+  .pill{background:var(--accent-soft); border:1px solid #bfdbfe; color:#1d4ed8; padding:5px 12px; border-radius:999px; font-size:12.5px; font-weight:600;}
+  .quiz{display:flex; flex-direction:column; gap:14px;}
+  .q{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px;}
+  .q .qt{font-weight:700; font-size:14.5px; margin-bottom:10px;}
+  .opts{display:flex; flex-direction:column; gap:8px;}
+  .opt{display:flex; align-items:flex-start; gap:10px; padding:9px 12px; border:1.5px solid var(--line); border-radius:9px; cursor:pointer; font-size:13.5px; transition:.15s; background:#fff;}
+  .opt:hover{border-color:var(--accent); background:var(--accent-soft);}
+  .opt input{margin-top:3px; accent-color:var(--accent);}
+  .opt.sel{border-color:var(--accent); background:var(--accent-soft);}
+  .opt.correct{border-color:var(--ok); background:var(--ok-soft);}
+  .opt.wrong{border-color:var(--no); background:var(--no-soft);}
+  .opt .mark{margin-left:auto; font-weight:700;}
+  .explain{font-size:13px; color:var(--muted); margin-top:8px; display:none;}
+  .explain.show{display:block;}
+  .qbtn{margin-top:14px; background:var(--accent); color:#fff; border:none; padding:9px 18px; border-radius:9px; font-size:14px; font-weight:600; cursor:pointer;}
+  .qbtn:hover{opacity:.9;}
+  .score{background:var(--amber-soft); border:1px solid #fde68a; border-radius:12px; padding:12px 16px; font-weight:700; color:#92400e; margin-top:16px; display:none;}
+  .tip{background:var(--ok-soft); border:1px solid #bbf7d0; border-radius:12px; padding:12px 16px; font-size:13px; color:#166534; margin-top:14px;}
+  footer{text-align:center; color:var(--muted); font-size:12px; margin-top:22px;}
+</style>
+</head>
+<body data-page-node-id="5C9lSVP0rTXuWlArVio3HT">
+<div class="wrap" data-page-node-id="WFXJ7wrJD6K0EDqu1z8VRf">
+
+<header data-page-node-id="46xHv2zgyGyX4OHwzH75Vo">
+  <h1 data-page-node-id="SnULyOuaeeBimVxX9k7nyn">🤖 Agent Skill · 一分钟掌握</h1>
+  <p data-page-node-id="4W0yDVFIzc61hcyM27DOue">把专业任务的"做法"打包成可复用的技能，让 AI 按需调用——这就是 Agent Skill 的核心思想。</p>
+  <div class="meta" data-page-node-id="Wgu4dTzLAAwxM0vG1DW9KN">
+    <span data-page-node-id="37jpNgCBLg69bXBVxn1Ah0">⏱ 阅读约 60 秒</span>
+    <span data-page-node-id="EHPeOP6WQBi76ZvVom2ZjS">📖 大数据与人工智能课程</span>
+    <span data-page-node-id="u69W90lTo1iXCEOnfuTByJ">🗂 BigData-AI / notes</span>
+  </div>
+</header>
+
+<h2 data-page-node-id="SQ3MtAXt1Y7tLJIR21kCoF">① 什么是 Agent Skill（一句话）</h2>
+<p style="font-size:15px; background:var(--accent-soft); border-radius:10px; padding:12px 16px;" data-page-node-id="dxrgcz59qSb5Y9kcRYWShy">
+<strong data-page-node-id="aS4D3zkMNbP56aCxewPr5F">Agent Skill</strong> 是 <strong data-page-node-id="F8QmvWmvIwNkis7yaH2Bvw">一段结构化指令 + 可选脚本/资料</strong> 组成的"能力单元"。它把人类完成某类任务的专业流程，沉淀为 AI 可以<strong data-page-node-id="BUoZdTf5JPxQCDCeuNrd1a">识别触发、立即照做、跨会话复用</strong>的标准技能包。
+</p>
+
+<h2 data-page-node-id="4svsRrmv6YGTTSRtgTWmqt">② 一个 Skill 的典型结构</h2>
+<div class="grid" data-page-node-id="jBjd4VawknegjKrxqUNGWS">
+  <div class="card" data-page-node-id="NMdN1vpjW9oKpEcN2r0oWI"><h3 data-page-node-id="MiOpKPzUHafgRFt99pEGM1">📄 SKILL.md（必需·核心）</h3><ul data-page-node-id="71BBSg6iJyqfINihjmDNbc">
+    <li data-page-node-id="CtIoHXnm6GWD1adVorZd60">技能名 name + 触发条件</li>
+    <li data-page-node-id="U372nETDC2wqixdprhDsJV">一段精炼的<strong data-page-node-id="YAVI5oHdDqtz875T3qClrU">操作指令</strong>（告诉 Agent 怎么干）</li>
+    <li data-page-node-id="6WMBxrF7lK7fqt2e4OtYCu">何时用、何时不用、注意事项</li></ul></div>
+  <div class="card" data-page-node-id="gVdgGF5tv3zE8tkE1rtLhQ"><h3 data-page-node-id="DQJnDmCDDYgjH50c633MkA">📁 scripts/（可选）</h3><ul data-page-node-id="BuVNOPrULqHFHLLhXS9i48">
+    <li data-page-node-id="g8Rqe9uO4bDoBaY5Vs3s5u">可直接执行的可复用脚本</li>
+    <li data-page-node-id="IRRnhtzhYrjtcfA1GmPM7u">如生成器、爬虫、转换脚本</li></ul></div>
+  <div class="card" data-page-node-id="ekDGfZIQ8F4SgMu3RRcLHA"><h3 data-page-node-id="j4BUqBw3XhnCMHIWqO8Mzx">📎 references/（可选）</h3><ul data-page-node-id="DPsQ3Cg6bkGB484996vdoM">
+    <li data-page-node-id="L3CDP1T1kpIvyrrvm0DATI">参考文档、数据、模板</li>
+    <li data-page-node-id="rpWunPcjG2U1Rki9E0abkj">按需被读取，不占主上下文</li></ul></div>
+</div>
+
+<h2 data-page-node-id="JFv8l5p4ts1z4jLEbUM8wO">③ 工作原理（5 步闭环）</h2>
+<div class="flow" data-page-node-id="9HvBzsxfhAs84CjfGOGkzJ">
+  <div class="steps" data-page-node-id="mL6Mm7ugSDgTfbStm887Ti">
+    <div class="step" data-page-node-id="7Q1ij10EVriKRhBt9FwFOh"><div class="num" data-page-node-id="9UDtooEfASOLspsMDuyitK">1</div><p data-page-node-id="JoowE0fLJjVA2qySBx9FWi">识别需求</p><small data-page-node-id="htEEIvSnb02grqnvePSrHh">任务与技能描述匹配</small></div>
+    <div class="arrow" data-page-node-id="lHhQadlsw6a9M6GMMw2gH6">→</div>
+    <div class="step" data-page-node-id="c6sY2t4auD2RMN7KRn3pVw"><div class="num" data-page-node-id="BUkbC2pXB3BxnkBxln9s6S">2</div><p data-page-node-id="MYdSBPRrQCEpoHT7OFQUnw">加载技能</p><small data-page-node-id="NPR6P0WkGDtXZYOKXwIHiB">读取 SKILL.md</small></div>
+    <div class="arrow" data-page-node-id="5RHzxY6jCLKI1klRi1pFIU">→</div>
+    <div class="step" data-page-node-id="JbDrXgFI2W1sVy6uwAAhn7"><div class="num" data-page-node-id="RDVHRLxEUxtQc1OWhXKqyv">3</div><p data-page-node-id="2HQs3Rf5m0AzM4rALDOw7J">照做执行</p><small data-page-node-id="b0FJc4MGnEGNgkcbXgzMRl">跑脚本/写文件</small></div>
+    <div class="arrow" data-page-node-id="aqjIBokpKD9el11ak6AJ72">→</div>
+    <div class="step" data-page-node-id="zsWHDMNcMzia3OG8VUnTYQ"><div class="num" data-page-node-id="0mU6aNAKb9j2VBAaw0Lg0V">4</div><p data-page-node-id="E8w5dsGK9i2ENDtHagPAcT">产出交付</p><small data-page-node-id="S1GKq0v2bh3zfxbz1v0FRK">结果交给用户</small></div>
+    <div class="arrow" data-page-node-id="FOHZKSL0YSTxRQiILYc3gB">→</div>
+    <div class="step" data-page-node-id="K1TFRPWm1FFlvtX6w7qk1I"><div class="num" data-page-node-id="9Kv6q8FJS3xaXT4AzIj2iX">5</div><p data-page-node-id="2mQIcleqH0Fhc2BmCBE8YO">复盘改进</p><small data-page-node-id="GB9H0fYWahuo003afMHnOd">更新技能防退化</small></div>
+  </div>
+</div>
+
+<h2 data-page-node-id="y2jP9jkSeWIhJVoCakdYau">④ 为什么重要（核心价值）</h2>
+<div class="pills" data-page-node-id="5FfcnOGUuwpmPcz759jaS0">
+  <span class="pill" data-page-node-id="PeppHh4NVTP2psZaWnJqqz">🔄 可复用 —— 一次沉淀多次使用</span>
+  <span class="pill" data-page-node-id="eji6t8sPWQsgOVpMdqflbv">🎯 专业化 —— 内嵌领域最佳实践</span>
+  <span class="pill" data-page-node-id="goghTI267EcjM6HhpSqyCg">📐 标准化 —— 团队共享统一流程</span>
+  <span class="pill" data-page-node-id="CqJe95TVXF7hGjvcGUs0mB">🧠 省上下文 —— 资料按需加载</span>
+  <span class="pill" data-page-node-id="oU9NYwIMoCnnbwdKJqjFZf">📈 可进化 —— 用过就反思改良</span>
+  <span class="pill" data-page-node-id="FG9DnIGQoYongyOKL0l6k0">🚀 提效率 —— 告别每次从零开始</span>
+</div>
+
+<h2 data-page-node-id="X2EEgqdHI54BEDfIDtbRPo">⑤ 一个最小示例（看懂即可）</h2>
+<pre data-page-node-id="kpdB5OFLyeOBX7CR2wOE0C"><code data-page-node-id="CA2bGTuokQxBbaTRHfbWuQ"><span class="cm" data-page-node-id="urACsFn713eV3nQCdNFC6K"># skill: 生成课程周报</span>
+name: 课程周报生成器
+description: 当用户要"生成/写 周报"时使用
+trigger: 周报 / report
+
+<span class="cm" data-page-node-id="HzvPaDawICAo2J3WnhUKZg"># 指令（告诉 Agent 怎么做）</span>
+1. 汇总本周 notes/ 与 code/ 的改动
+2. 生成结构化 HTML 周报
+3. 保存到 notes/weekly/ 并用浏览器预览</code></pre>
+
+<h2 data-page-node-id="KWsCNvOCAd8a6FgAVwcXxQ">⑥ 三个关键纪律</h2>
+<div class="grid" data-page-node-id="dFR7gkR1AsbtMHWbKaEALx">
+  <div class="card" data-page-node-id="XfyqTAIYCMkYSHE38c5Qp1"><h3 data-page-node-id="T55I8GgBOyEubUHqABinMg">🎯 匹配才触发</h3><ul data-page-node-id="9Bl8XkbRGNmoeDF4HDNcdG"><li data-page-node-id="hIC4nxhNx4U4tiiADrHVic">技能与需求匹配才加载</li><li data-page-node-id="fIbpPeH5hHJJzhE9BAYVYl">不相关绝不生搬硬套</li></ul></div>
+  <div class="card" data-page-node-id="f7molgrsYH0U3ltB1uH2Yz"><h3 data-page-node-id="XonZrsyP02IQXXO4EiT272">✅ 按指令执行</h3><ul data-page-node-id="hOpshU8YhCLEMXs9cXgMSv"><li data-page-node-id="KCMvAKmHGFFW6WjxQJwqC7">加载后<strong data-page-node-id="ubWurcymJePVtyFOyTh6AH">立即照做</strong></li><li data-page-node-id="nE7ESt8kc4OYY7BMc7rAZF">不跳过步骤、不自行发挥</li></ul></div>
+  <div class="card" data-page-node-id="6w4lHF5SDqW188vI55OqgY"><h3 data-page-node-id="Zi5vye5m4xwNnxrOo83hv0">🔁 用过即复盘</h3><ul data-page-node-id="88TBJjSf4XGkAXqoMDRtTL"><li data-page-node-id="6GxeuPeFAczCKpP8blPKWM">发现过时/错误就修正</li><li data-page-node-id="yBAMRS7LdSDSyEEYX7PH0e">让技能持续进化不退化</li></ul></div>
+</div>
+
+<h2 data-page-node-id="xpFqPA9b694OoBCnOFcI5G">⑦ 自我检测 · 5 道题</h2>
+<div class="quiz" data-page-node-id="Bz8t0P8k7yGs22vAiNo3gT">
+  <div class="q" data-page-node-id="S6WI4UdFc31qcNanXzftXh">
+    <div class="qt" data-page-node-id="Ncvh9HQuLm5gESJqcxGmYe">Q1. 一个 Agent Skill 的"核心必需"文件是哪个？</div>
+    <div class="opts" data-page-node-id="J6JEjrFdkEdynCjlJdbFLl">
+      <label class="opt" data-page-node-id="PFj1HXn0jg2daBCIeBqsDQ"><input type="radio" name="q1" value="a" data-page-node-id="gJsIW9aoxuk3y9gEnbAfCS">scripts/run.py</label>
+      <label class="opt" data-page-node-id="yAT9A2dmMhtaE7xlICO8lY"><input type="radio" name="q1" value="b" data-page-node-id="EIOkmP281DH9T0JCR63vu4">SKILL.md（含名称+指令）</label>
+      <label class="opt" data-page-node-id="69KnVLmZoQAYGhGiuvuQVw"><input type="radio" name="q1" value="c" data-page-node-id="10wAtbQakF0A4T6FOC0dDG">references/data.json</label>
+      <label class="opt" data-page-node-id="K5bGwOsSbQ6zZk3PV2RPFP"><input type="radio" name="q1" value="d" data-page-node-id="1hfSiO9ZUpGGCg4ARIe2re">README.md</label>
+    </div>
+    <div class="explain" data-page-node-id="c4LIXEyDwxCipcrHCc1awL">✅ 核心是 <b data-page-node-id="XS5m55whL3qGAh4cEHDEng">SKILL.md</b>，它承载名称、触发条件与操作指令；scripts/references 均为可选增强。</div>
+    <button class="qbtn" onclick="checkQ(1,'b')" data-page-node-id="pYRVSHz21Bys0LkUqhTS5H">判题</button>
+  </div>
+
+  <div class="q" data-page-node-id="lnFDeTqbqBDSHELdHereI7">
+    <div class="qt" data-page-node-id="TsEboIXbyfSFIie1I2LBpP">Q2. references/ 目录的主要作用是什么？</div>
+    <div class="opts" data-page-node-id="Tjgn1MF29YMOdZ0gzChecB">
+      <label class="opt" data-page-node-id="g1OJO4zwIQEbb4f577X8H6"><input type="radio" name="q2" value="a" data-page-node-id="AoZd7MVJ3FJirOZseKtzPu">每次都强制读入主上下文</label>
+      <label class="opt" data-page-node-id="cGnzekAZ6GpF1XCTQ8jlo1"><input type="radio" name="q2" value="b" data-page-node-id="tLknIH1qEJnHQcjQKgm2o6">存放需联网的数据</label>
+      <label class="opt" data-page-node-id="CRPDJOWluBoAS2wcaVWnev"><input type="radio" name="q2" value="c" data-page-node-id="AJlXs8lnw7Om7OOSHSyQBE">按需提供资料，减少上下文占用</label>
+      <label class="opt" data-page-node-id="CTYw86s9AcicvINrCfYfR4"><input type="radio" name="q2" value="d" data-page-node-id="PsmBwTSSErsvsmQ60Usu1x">存放技能的备份</label>
+    </div>
+    <div class="explain" data-page-node-id="HQfhRgaKD1JcaaDP5Sde9M">✅ references 的资料是<b data-page-node-id="dNJkv6DkywMxCZwBPk8a0V">按需读取</b>的，既能提供细节，又不长期占用有限的上下文窗口。</div>
+    <button class="qbtn" onclick="checkQ(2,'c')" data-page-node-id="nBs7dsa5yn6VJ4OoTuKdTc">判题</button>
+  </div>
+
+  <div class="q" data-page-node-id="7N2DIU0i5Y0GkQxVgRBbkF">
+    <div class="qt" data-page-node-id="YxGVzUO9X8z0n5hi7Q11FN">Q3. 判断：一次应同时加载多个技能以追求全能？</div>
+    <div class="opts" data-page-node-id="UP3ZrlqlFrA1lomyFsh6DZ">
+      <label class="opt" data-page-node-id="WeC3OzfyVyJAx4MVxqsBlz"><input type="radio" name="q3" value="a" data-page-node-id="h0vszfBlEHrCHBKWelRTXb">对，越多越强</label>
+      <label class="opt" data-page-node-id="tKIG55beDu5paCmcgEG5YI"><input type="radio" name="q3" value="b" data-page-node-id="4hReV5cRpCCmofnGUNi0Yj">错，一次聚焦一个匹配的技能最稳</label>
+      <label class="opt" data-page-node-id="Hl8EtxvfhPs1sa9dPfFV1U"><input type="radio" name="q3" value="c" data-page-node-id="fvDbYGF23FByWVL6Zmda4J">只加载付费技能</label>
+      <label class="opt" data-page-node-id="FgU9xE1NIrUkfiOC8f5mkH"><input type="radio" name="q3" value="d" data-page-node-id="SEh3JBE64j9gBynweH28c2">完全无所谓</label>
+    </div>
+    <div class="explain" data-page-node-id="oX6OTDYy4SyTFoMITF98tp">✅ 应<b data-page-node-id="nMPbEs1HJRL6gvEEogEmiW">一次一个</b>：聚焦匹配的技能，避免指令互相冲突、上下文被稀释。</div>
+    <button class="qbtn" onclick="checkQ(3,'b')" data-page-node-id="B7vSBx4aRgay0KwyD2gJCf">判题</button>
+  </div>
+
+  <div class="q" data-page-node-id="f5H9j3io5UBLAlk7xXJiTN">
+    <div class="qt" data-page-node-id="XPY3gojm6P1SfNWKWDrndd">Q4. 使用技能时发现指令有误/过时，正确做法是？</div>
+    <div class="opts" data-page-node-id="4er59nUkLaCIA7PqvXF7EF">
+      <label class="opt" data-page-node-id="kDVNlBO5Qc5UyKGCwEEDvg"><input type="radio" name="q4" value="a" data-page-node-id="VhvO9uEhXsPyMJz8fqFAsQ">忽略，继续硬用</label>
+      <label class="opt" data-page-node-id="PFhhikjWcCQXXwszML6AnG"><input type="radio" name="q4" value="b" data-page-node-id="iMjSZwRYLtmpv6UrNwIeN6">自己随意改流程</label>
+      <label class="opt" data-page-node-id="qhSqcaJyuqLdjnTXgw5VFH"><input type="radio" name="q4" value="c" data-page-node-id="ImPYJSMZNqR3PN9uBWkQWt">当场修正技能本身并记录</label>
+      <label class="opt" data-page-node-id="927fBuW7wX9PEzvXbhwB8k"><input type="radio" name="q4" value="d" data-page-node-id="Vy5SAR40Z7reKiAmWw4Irc">删掉技能重装</label>
+    </div>
+    <div class="explain" data-page-node-id="50BXLdYhOjhXyQxz0lY6Nj">✅ 应<b data-page-node-id="kAhs6KNPYx8npeK5j2oF3L">当场修正并记录</b>（技能纪律第③条）：防止错误技能反复拖累后续任务，让技能持续进化。</div>
+    <button class="qbtn" onclick="checkQ(4,'c')" data-page-node-id="6EPpDGrPyDL6Zuo7EYoqxp">判题</button>
+  </div>
+
+  <div class="q" data-page-node-id="J7oayVrrMQVU9g07rG6RHE">
+    <div class="qt" data-page-node-id="cONqMOkaobFxI5tVOE4SbZ">Q5. Skill 相比"让 Agent 每次自由发挥"，最大优势是？</div>
+    <div class="opts" data-page-node-id="aWQOMuVRUpKYE9Ex2uL0JA">
+      <label class="opt" data-page-node-id="mMOJdl8DdVPnwGSEDWhi5y"><input type="radio" name="q5" value="a" data-page-node-id="MltCa7oeQjJTC8cFm9zw2K">文件更多</label>
+      <label class="opt" data-page-node-id="A78eSmHdB2U5iJPqw10VBZ"><input type="radio" name="q5" value="b" data-page-node-id="8Z1uzk3BTcDMvsvfqBro61">把专业做法标准化、可复用、可共享</label>
+      <label class="opt" data-page-node-id="L3FDxneRy3c6finDd1RMCl"><input type="radio" name="q5" value="c" data-page-node-id="J4D9AERuo5bHsxEP4SaiyA">运行更快</label>
+      <label class="opt" data-page-node-id="QY3qh3IGjwLcqkwNsJDlOx"><input type="radio" name="q5" value="d" data-page-node-id="QST5eKRdgXvCc6ZDRPC7K7">无需提示词</label>
+    </div>
+    <div class="explain" data-page-node-id="76T78u4qQICTIindRVJ1UO">✅ Skill 的核心价值是<b data-page-node-id="88ZPZL44fs0i9Tce5DNRKH">标准化沉淀 + 复用 + 共享</b>，把"怎么做专业"固化下来，而不是每次靠自由发挥。</div>
+    <button class="qbtn" onclick="checkQ(5,'b')" data-page-node-id="DFFgeEreJN76zxwYQSQCky">判题</button>
+  </div>
+</div>
+
+<div class="score" id="scoreBox" data-page-node-id="feXvULtV30tbcqmgMyMmdW"></div>
+<div class="tip" id="finalTip" style="display:none;" data-page-node-id="92PO7A99xDfS04wn9AhzpW">🎯 若 5 题全对——你已经掌握 Agent Skill 的核心心智模型：<b data-page-node-id="5xQYlnFzyoCMPS5ZnRd7n2">识别触发 → 加载指令 → 照做执行 → 复盘进化</b>。别忘了自己动手写一个 Skill 练练手！</div>
+
+<footer data-page-node-id="wDD1ChH4eySst2DXMls5Lw">BigData-AI · notes · 大数据与人工智能课程学习资料 · 生成于 2026-09-03</footer>
+</div>
+
+<script>
+  var answered={};
+  function checkQ(n,ans){
+    var q=document.querySelectorAll('.q')[n-1];
+    var opts=q.querySelectorAll('.opt');
+    var chosen=q.querySelector('input:checked');
+    if(!chosen){alert('请先选择一个答案');return;}
+    // clear previous states on this q
+    opts.forEach(function(o){o.classList.remove('sel','correct','wrong');var m=o.querySelector('.mark');if(m)m.textContent='';});
+    var userVal=chosen.value;
+    opts.forEach(function(o){
+      var val=o.querySelector('input').value;
+      if(val===ans){o.classList.add('correct');}
+      else if(val===userVal && val!==ans){o.classList.add('wrong');var mm=document.createElement('span');mm.className='mark';mm.textContent='✗';o.appendChild(mm);}
+    });
+    q.querySelector('.explain').classList.add('show');
+    q.querySelectorAll('input').forEach(function(i){i.disabled=true;});
+    answered[n]= (userVal===ans);
+    updateScore();
+  }
+  function updateScore(){
+    var keys=Object.keys(answered);
+    if(keys.length<5)return;
+    var right=keys.filter(function(k){return answered[k];}).length;
+    document.getElementById('scoreBox').style.display='block';
+    document.getElementById('scoreBox').textContent='📊 你的得分：'+right+' / 5'+(right>=4?' — 优秀，核心已掌握！':(right>=3?' — 不错，再巩固一下！':' — 建议重读上方要点'));
+    document.getElementById('finalTip').style.display='block';
+  }
+</script>
+</body>
+</html>
