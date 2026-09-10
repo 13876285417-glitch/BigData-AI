@@ -5,117 +5,120 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>图解 Agent Skill · 可视化学习材料</title>
 <style>
+  /* ===== 配色：单一主色 + 灰阶，不引入其他色相 ===== */
   :root{
-    --bg:#f7f8fa; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
-    --accent:#2563eb; --accent-soft:#eff6ff; --accent-deep:#1e3a8a;
-    --ok:#16a34a; --ok-soft:#f0fdf4;
-    --no:#dc2626; --no-soft:#fef2f2;
-    --amber:#d97706; --amber-soft:#fffbeb;
-    --purple:#7c3aed; --purple-soft:#f5f3ff;
-    --line:#e5e7eb;
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --ink:#1f2937;
+    --muted:#6b7280;
+    --faint:#9ca3af;
+    --accent:#2563eb;        /* 唯一的主色 */
+    --accent-deep:#1e40af;
+    --accent-soft:#eff6ff;
+    --accent-line:#bfdbfe;
+    --grey-soft:#f3f4f6;
+    --grey-line:#e5e7eb;
+    --grey-deep:#374151;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--ink);line-height:1.7;padding:22px;
        font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
   .wrap{max-width:900px;margin:0 auto}
 
-  header{background:linear-gradient(135deg,#1e3a8a,#2563eb 60%,#3b82f6);color:#fff;
-         border-radius:16px;padding:24px 26px;margin-bottom:18px}
+  header{background:var(--accent-deep);color:#fff;border-radius:14px;
+         padding:24px 26px;margin-bottom:20px}
   header h1{font-size:25px;font-weight:700;letter-spacing:.4px}
-  header p{opacity:.94;font-size:14px;margin-top:6px}
+  header p{opacity:.9;font-size:14px;margin-top:6px}
   .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-  .meta span{background:rgba(255,255,255,.18);padding:3px 11px;border-radius:999px;font-size:12px}
+  .meta span{background:rgba(255,255,255,.16);padding:3px 11px;border-radius:999px;font-size:12px}
 
-  h2{font-size:18px;margin:30px 0 12px;padding-left:11px;border-left:4px solid var(--accent)}
-  h2 .en{font-size:12.5px;color:var(--muted);font-weight:400;margin-left:8px;letter-spacing:.3px}
+  h2{font-size:18px;margin:32px 0 12px;padding-left:11px;border-left:4px solid var(--accent)}
+  h2 .en{font-size:12.5px;color:var(--faint);font-weight:400;margin-left:8px;letter-spacing:.3px}
 
-  /* 导语 */
-  .lede{background:var(--accent-soft);border:1px solid #bfdbfe;border-radius:12px;
-        padding:14px 18px;font-size:14.5px;margin-bottom:8px}
+  .lede{background:var(--accent-soft);border:1px solid var(--accent-line);
+        border-radius:12px;padding:14px 18px;font-size:14.5px}
   .lede strong{color:var(--accent-deep)}
 
   /* 图解卡片 */
-  .fig{background:var(--card);border:1px solid var(--line);border-radius:14px;
+  .fig{background:var(--card);border:1px solid var(--grey-line);border-radius:12px;
        padding:18px 18px 14px;margin-bottom:6px}
   .fig svg{display:block;width:100%;height:auto}
-  .cap{font-size:13px;color:var(--muted);text-align:center;margin-top:10px;
-       padding-top:10px;border-top:1px dashed var(--line)}
+  .cap{font-size:13px;color:var(--muted);text-align:center;margin-top:12px;
+       padding-top:10px;border-top:1px dashed var(--grey-line)}
   .cap b{color:var(--ink)}
 
-  /* 人话解释块 */
-  .plain{background:var(--amber-soft);border:1px solid #fde68a;border-left:4px solid var(--amber);
-         border-radius:10px;padding:12px 16px;margin:12px 0 6px;font-size:13.5px;color:#78350f}
-  .plain::before{content:"💡 说人话：";font-weight:700;color:#92400e}
+  /* 说人话 */
+  .plain{background:var(--grey-soft);border-left:3px solid var(--faint);
+         border-radius:8px;padding:12px 16px;margin:12px 0 6px;
+         font-size:13.5px;color:var(--grey-deep)}
+  .plain::before{content:"💡 说人话：";font-weight:700;color:var(--ink)}
 
   /* 对比表 */
   .cmp{width:100%;border-collapse:separate;border-spacing:0;font-size:13.5px;
-       background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  .cmp th,.cmp td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-  .cmp th{background:#f9fafb;font-weight:700;font-size:13px;color:var(--ink)}
+       background:var(--card);border:1px solid var(--grey-line);border-radius:12px;overflow:hidden}
+  .cmp th,.cmp td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--grey-line);vertical-align:top}
+  .cmp th{background:var(--grey-soft);font-weight:700;font-size:13px}
   .cmp tr:last-child td{border-bottom:none}
-  .cmp td:first-child{font-weight:600;color:var(--muted);width:26%;background:#fcfcfd}
+  .cmp td:first-child{font-weight:600;color:var(--muted);width:24%;background:#fafbfc}
+  .cmp .yes{color:var(--accent-deep);font-weight:600}
+  .cmp .no{color:var(--faint)}
 
   /* 层级卡 */
   .tiers{display:grid;gap:10px}
   .tier{display:flex;gap:14px;align-items:flex-start;background:var(--card);
-        border:1px solid var(--line);border-radius:12px;padding:14px 16px}
-  .tier .no{flex:0 0 30px;height:30px;border-radius:50%;display:flex;align-items:center;
-            justify-content:center;color:#fff;font-weight:700;font-size:14px}
+        border:1px solid var(--grey-line);border-radius:12px;padding:14px 16px}
+  .tier .no{flex:0 0 28px;height:28px;border-radius:50%;display:flex;
+            align-items:center;justify-content:center;color:#fff;
+            font-weight:700;font-size:13px;background:var(--accent)}
   .tier h4{font-size:14px;margin-bottom:3px}
   .tier p{font-size:13px;color:var(--muted)}
-  .t1 .no{background:#0891b2}.t2 .no{background:var(--accent)}.t3 .no{background:var(--purple)}
 
   /* 纪律卡 */
   .grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-  .dcard{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px}
-  .dcard h3{font-size:14px;color:var(--accent);margin-bottom:7px}
+  .dcard{background:var(--card);border:1px solid var(--grey-line);border-radius:12px;padding:15px}
+  .dcard h3{font-size:14px;color:var(--accent-deep);margin-bottom:7px}
   .dcard ul{list-style:none}
-  .dcard li{font-size:13px;color:#374151;padding-left:16px;position:relative;margin-bottom:5px}
-  .dcard li::before{content:"▸";position:absolute;left:0;color:var(--accent)}
+  .dcard li{font-size:13px;color:var(--grey-deep);padding-left:16px;position:relative;margin-bottom:5px}
+  .dcard li::before{content:"▸";position:absolute;left:0;color:var(--faint)}
 
-  code{background:var(--accent-soft);color:#1d4ed8;padding:1px 6px;border-radius:4px;
-       font-size:12.5px;font-family:"SF Mono",Menlo,Consolas,monospace}
-  pre{background:#0f172a;color:#e2e8f0;padding:14px 16px;border-radius:11px;
-      font-size:12.5px;overflow-x:auto;line-height:1.75;
-      font-family:"SF Mono",Menlo,Consolas,monospace}
-  pre .cm{color:#64748b}
-  pre .k{color:#7dd3fc}
-  pre .s{color:#86efac}
+  code{background:var(--accent-soft);color:var(--accent-deep);padding:1px 6px;
+       border-radius:4px;font-size:12.5px;font-family:"SF Mono",Menlo,Consolas,monospace}
 
   /* 来源 */
-  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:15px 18px}
-  .src h3{color:#c2410c;font-size:14px;margin-bottom:9px}
-  .src li{font-size:13px;margin:9px 0 9px 18px;color:#374151}
-  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all;font-size:12.5px}
+  .src{background:var(--card);border:1px solid var(--grey-line);border-radius:12px;padding:15px 18px}
+  .src h3{color:var(--ink);font-size:14px;margin-bottom:9px}
+  .src li{font-size:13px;margin:9px 0 9px 18px;color:var(--grey-deep)}
+  .src a{color:var(--accent);font-weight:600;text-decoration:none;word-break:break-all;font-size:12.5px}
   .src a:hover{text-decoration:underline}
   .src .why{color:var(--muted);font-size:12px;display:block;margin-top:2px}
-  .ref{display:inline-block;background:#e0e7ff;color:#4338ca;font-size:11px;
-       padding:1px 7px;border-radius:999px;margin-left:5px;white-space:nowrap;vertical-align:1px}
+  .ref{display:inline-block;background:var(--grey-soft);color:var(--muted);font-size:11px;
+       padding:1px 7px;border-radius:999px;margin-left:5px;white-space:nowrap;vertical-align:1px;
+       border:1px solid var(--grey-line)}
 
   /* 测验 */
   .quiz{display:flex;flex-direction:column;gap:14px}
-  .q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:17px}
+  .q{background:var(--card);border:1px solid var(--grey-line);border-radius:12px;padding:17px}
   .qt{font-weight:700;font-size:14.5px;margin-bottom:11px}
   .opts{display:flex;flex-direction:column;gap:8px}
-  .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border:1.5px solid var(--line);
+  .opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border:1.5px solid var(--grey-line);
        border-radius:9px;cursor:pointer;font-size:13.5px;transition:.15s;background:#fff}
   .opt:hover{border-color:var(--accent);background:var(--accent-soft)}
   .opt input{margin-top:4px;accent-color:var(--accent)}
-  .opt.correct{border-color:var(--ok);background:var(--ok-soft)}
-  .opt.wrong{border-color:var(--no);background:var(--no-soft)}
-  .opt .mark{margin-left:auto;font-weight:700}
+  .opt.correct{border-color:var(--accent);background:var(--accent-soft);font-weight:600}
+  .opt.wrong{border-color:var(--faint);background:var(--grey-soft);text-decoration:line-through;color:var(--muted)}
+  .opt .mark{margin-left:auto;font-weight:700;color:var(--muted)}
   .explain{font-size:13px;color:var(--muted);margin-top:10px;display:none}
   .explain.show{display:block}
   .qbtn{margin-top:13px;background:var(--accent);color:#fff;border:none;padding:9px 18px;
         border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
-  .qbtn:hover{opacity:.9}
-  .score{background:var(--amber-soft);border:1px solid #fde68a;border-radius:12px;padding:13px 17px;
-         font-weight:700;color:#92400e;margin-top:16px;display:none}
-  .tip{background:var(--ok-soft);border:1px solid #bbf7d0;border-radius:12px;padding:13px 17px;
-       font-size:13px;color:#166534;margin-top:14px;display:none}
+  .qbtn:hover{background:var(--accent-deep)}
+  .score{background:var(--grey-soft);border:1px solid var(--grey-line);border-radius:12px;
+         padding:13px 17px;font-weight:700;color:var(--ink);margin-top:16px;display:none}
+  .tip{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:12px;
+       padding:13px 17px;font-size:13px;color:var(--accent-deep);margin-top:14px;display:none}
 
-  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;
-         padding-top:16px;border-top:1px solid var(--line)}
+  footer{text-align:center;color:var(--faint);font-size:12px;margin-top:28px;
+         padding-top:16px;border-top:1px solid var(--grey-line)}
 
   @media (max-width:600px){
     body{padding:14px}
@@ -129,22 +132,22 @@
 <div class="wrap">
 
 <header>
-  <h1>🧩 图解 Agent Skill</h1>
+  <h1>图解 Agent Skill</h1>
   <p>用 6 张图看懂：AI 的「技能包」到底是什么、怎么工作、为什么重要。</p>
   <div class="meta">
-    <span>⏱ 阅读约 3 分钟</span>
-    <span>📚 全部知识点标注官方来源</span>
-    <span>🗂 BigData-AI / notes</span>
+    <span>阅读约 3 分钟</span>
+    <span>知识点标注官方来源</span>
+    <span>BigData-AI / notes</span>
   </div>
 </header>
 
 <div class="lede">
   这份材料把 <strong>Agent Skill（智能体技能）</strong> 这个概念，从纯文字改成了<strong>图解 + 交互自测</strong>的形式。
-  每一个知识点后面都标注了它出自哪份官方文档，你可以顺着链接去核对原文。
+  每个知识点后面都标注了它出自哪份官方文档，你可以顺着链接去核对原文。
 </div>
 
 <!-- ===================== 来源 ===================== -->
-<h2>📚 官方来源<span class="en">Sources</span></h2>
+<h2>官方来源<span class="en">Sources</span></h2>
 <div class="src">
   <h3>本材料所有知识点均出自以下权威来源：</h3>
   <ul>
@@ -171,61 +174,53 @@
   </ul>
 </div>
 
-<!-- ===================== 图 1：是什么 ===================== -->
+<!-- ===================== 图 1 ===================== -->
 <h2>① 一张图看懂：Skill 是什么<span class="en">What is a Skill</span></h2>
 
 <div class="fig">
-  <svg viewBox="0 0 820 300" role="img" aria-label="Skill 概念示意图：新员工入职指南的类比">
+  <svg viewBox="0 0 820 300" role="img" aria-label="Skill 概念示意图：通用 AI 加载技能包后变成领域专家">
     <defs>
-      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#2563eb"/><stop offset="100%" stop-color="#3b82f6"/>
-      </linearGradient>
-      <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a78bfa"/>
-      </linearGradient>
+      <marker id="a1" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
+        <path d="M0,0 L7,3.2 L0,6.4 z" fill="#9ca3af"/>
+      </marker>
     </defs>
 
     <!-- 左：通用 AI -->
-    <rect x="24" y="60" width="240" height="180" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-    <circle cx="144" cy="118" r="30" fill="#e2e8f0"/>
-    <text x="144" y="126" text-anchor="middle" font-size="26">🤖</text>
-    <text x="144" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#334155">通用 AI</text>
-    <text x="144" y="199" text-anchor="middle" font-size="12" fill="#64748b">什么都懂一点</text>
-    <text x="144" y="219" text-anchor="middle" font-size="12" fill="#64748b">但不懂「你的规矩」</text>
+    <rect x="24" y="62" width="236" height="176" rx="14" fill="#f3f4f6" stroke="#e5e7eb" stroke-width="1.5"/>
+    <circle cx="142" cy="118" r="30" fill="#e5e7eb"/>
+    <text x="142" y="127" text-anchor="middle" font-size="26">🤖</text>
+    <text x="142" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#374151">通用 AI</text>
+    <text x="142" y="199" text-anchor="middle" font-size="12" fill="#6b7280">什么都懂一点</text>
+    <text x="142" y="218" text-anchor="middle" font-size="12" fill="#6b7280">但不懂「你的规矩」</text>
 
     <!-- 箭头 -->
-    <path d="M276 150 L 336 150" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#ar)"/>
-    <defs>
-      <marker id="ar" markerWidth="9" markerHeight="9" refX="7" refY="3.2" orient="auto">
-        <path d="M0,0 L7,3.2 L0,6.4 z" fill="#94a3b8"/>
-      </marker>
-    </defs>
-    <text x="306" y="138" text-anchor="middle" font-size="11.5" fill="#64748b">加载</text>
-    <text x="306" y="172" text-anchor="middle" font-size="11.5" fill="#64748b">Skill</text>
+    <path d="M272 150 L 330 150" stroke="#9ca3af" stroke-width="2.5" marker-end="url(#a1)"/>
+    <text x="301" y="138" text-anchor="middle" font-size="11.5" fill="#6b7280">加载</text>
+    <text x="301" y="171" text-anchor="middle" font-size="11.5" fill="#6b7280">Skill</text>
 
     <!-- 中：技能包 -->
-    <rect x="348" y="46" width="200" height="208" rx="14" fill="url(#g1)"/>
-    <text x="448" y="78" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">📦 技能包</text>
-    <rect x="370" y="94" width="156" height="30" rx="7" fill="rgba(255,255,255,.92)"/>
-    <text x="448" y="114" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">📄 SKILL.md</text>
-    <rect x="370" y="132" width="156" height="30" rx="7" fill="rgba(255,255,255,.75)"/>
-    <text x="448" y="152" text-anchor="middle" font-size="12" fill="#1e3a8a">⚙️ scripts/</text>
-    <rect x="370" y="170" width="156" height="30" rx="7" fill="rgba(255,255,255,.75)"/>
-    <text x="448" y="190" text-anchor="middle" font-size="12" fill="#1e3a8a">📚 references/</text>
-    <rect x="370" y="208" width="156" height="30" rx="7" fill="rgba(255,255,255,.75)"/>
-    <text x="448" y="228" text-anchor="middle" font-size="12" fill="#1e3a8a">🎨 assets/</text>
+    <rect x="342" y="48" width="200" height="204" rx="14" fill="#2563eb"/>
+    <text x="442" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">技能包</text>
+    <rect x="364" y="96" width="156" height="30" rx="7" fill="#ffffff"/>
+    <text x="442" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="#1e40af">SKILL.md</text>
+    <rect x="364" y="134" width="156" height="30" rx="7" fill="rgba(255,255,255,.62)"/>
+    <text x="442" y="154" text-anchor="middle" font-size="12" fill="#ffffff">scripts/</text>
+    <rect x="364" y="172" width="156" height="30" rx="7" fill="rgba(255,255,255,.62)"/>
+    <text x="442" y="192" text-anchor="middle" font-size="12" fill="#ffffff">references/</text>
+    <rect x="364" y="210" width="156" height="30" rx="7" fill="rgba(255,255,255,.62)"/>
+    <text x="442" y="230" text-anchor="middle" font-size="12" fill="#ffffff">assets/</text>
 
     <!-- 箭头 -->
-    <path d="M560 150 L 620 150" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#ar)"/>
-    <text x="590" y="138" text-anchor="middle" font-size="11.5" fill="#64748b">变身</text>
+    <path d="M554 150 L 612 150" stroke="#9ca3af" stroke-width="2.5" marker-end="url(#a1)"/>
+    <text x="583" y="138" text-anchor="middle" font-size="11.5" fill="#6b7280">变身</text>
 
     <!-- 右：专家 -->
-    <rect x="632" y="60" width="164" height="180" rx="14" fill="url(#g2)"/>
-    <circle cx="714" cy="118" r="30" fill="rgba(255,255,255,.9)"/>
-    <text x="714" y="126" text-anchor="middle" font-size="26">🎓</text>
-    <text x="714" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">领域专家</text>
-    <text x="714" y="199" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.9)">按你的标准</text>
-    <text x="714" y="219" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.9)">把活干对</text>
+    <rect x="624" y="62" width="172" height="176" rx="14" fill="#1e40af"/>
+    <circle cx="710" cy="118" r="30" fill="rgba(255,255,255,.9)"/>
+    <text x="710" y="127" text-anchor="middle" font-size="26">🎓</text>
+    <text x="710" y="176" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">领域专家</text>
+    <text x="710" y="199" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.88)">按你的标准</text>
+    <text x="710" y="218" text-anchor="middle" font-size="12" fill="rgba(255,255,255,.88)">把活干对</text>
   </svg>
   <div class="cap">
     <b>Skill = 一个文件夹</b>，里面装着一份「怎么做这件事」的说明书（<code>SKILL.md</code>）和可选素材。
@@ -238,59 +233,59 @@
   Skill 就是那份「入职指南」：把老师傅的做法写下来交给它，它立刻就变成了这个岗位的熟练工。
 </div>
 
-<!-- ===================== 图 2：目录结构 ===================== -->
+<!-- ===================== 图 2 ===================== -->
 <h2>② 一个技能包长什么样<span class="en">Anatomy</span></h2>
 
 <div class="fig">
   <svg viewBox="0 0 820 330" role="img" aria-label="Skill 目录结构图">
     <!-- 文件夹外框 -->
-    <rect x="30" y="24" width="330" height="278" rx="12" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
-    <path d="M30 46 h330" stroke="#cbd5e1" stroke-width="1.5"/>
-    <text x="46" y="42" font-size="13.5" font-weight="700" fill="#334155">📁 my-skill/</text>
+    <rect x="30" y="24" width="330" height="278" rx="12" fill="#fafbfc" stroke="#e5e7eb" stroke-width="1.5"/>
+    <path d="M30 46 h330" stroke="#e5e7eb" stroke-width="1.5"/>
+    <text x="46" y="42" font-size="13.5" font-weight="700" fill="#374151">my-skill/</text>
 
     <!-- SKILL.md -->
     <rect x="48" y="60" width="294" height="56" rx="9" fill="#2563eb"/>
-    <text x="62" y="82" font-size="13" font-weight="700" fill="#fff">📄 SKILL.md</text>
-    <text x="62" y="102" font-size="11.5" fill="rgba(255,255,255,.92)">YAML 元信息（name + description）+ 指令正文</text>
-    <rect x="272" y="66" width="60" height="18" rx="9" fill="#dc2626"/>
-    <text x="302" y="79" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">必需</text>
+    <text x="62" y="82" font-size="13" font-weight="700" fill="#fff">SKILL.md</text>
+    <text x="62" y="102" font-size="11.5" fill="rgba(255,255,255,.9)">YAML 元信息（name + description）+ 指令正文</text>
+    <rect x="272" y="66" width="60" height="18" rx="9" fill="#ffffff"/>
+    <text x="302" y="79" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1e40af">必需</text>
 
     <!-- scripts -->
-    <rect x="48" y="126" width="294" height="46" rx="9" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.2"/>
-    <text x="62" y="147" font-size="12.5" font-weight="700" fill="#5b21b6">⚙️ scripts/</text>
-    <text x="62" y="164" font-size="11.5" fill="#7c3aed">可执行代码（Python / Bash 等）</text>
-    <rect x="272" y="132" width="60" height="18" rx="9" fill="#a78bfa"/>
-    <text x="302" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">可选</text>
+    <rect x="48" y="126" width="294" height="46" rx="9" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.2"/>
+    <text x="62" y="147" font-size="12.5" font-weight="700" fill="#374151">scripts/</text>
+    <text x="62" y="164" font-size="11.5" fill="#6b7280">可执行代码（Python / Bash 等）</text>
+    <rect x="272" y="132" width="60" height="18" rx="9" fill="#e5e7eb"/>
+    <text x="302" y="145" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6b7280">可选</text>
 
     <!-- references -->
-    <rect x="48" y="182" width="294" height="46" rx="9" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.2"/>
-    <text x="62" y="203" font-size="12.5" font-weight="700" fill="#5b21b6">📚 references/</text>
-    <text x="62" y="220" font-size="11.5" fill="#7c3aed">参考文档、资料，按需读取</text>
-    <rect x="272" y="188" width="60" height="18" rx="9" fill="#a78bfa"/>
-    <text x="302" y="201" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">可选</text>
+    <rect x="48" y="182" width="294" height="46" rx="9" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.2"/>
+    <text x="62" y="203" font-size="12.5" font-weight="700" fill="#374151">references/</text>
+    <text x="62" y="220" font-size="11.5" fill="#6b7280">参考文档、资料，按需读取</text>
+    <rect x="272" y="188" width="60" height="18" rx="9" fill="#e5e7eb"/>
+    <text x="302" y="201" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6b7280">可选</text>
 
     <!-- assets -->
-    <rect x="48" y="238" width="294" height="46" rx="9" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.2"/>
-    <text x="62" y="259" font-size="12.5" font-weight="700" fill="#5b21b6">🎨 assets/</text>
-    <text x="62" y="276" font-size="11.5" fill="#7c3aed">输出用的模板、图标、字体</text>
-    <rect x="272" y="244" width="60" height="18" rx="9" fill="#a78bfa"/>
-    <text x="302" y="257" text-anchor="middle" font-size="10.5" font-weight="700" fill="#fff">可选</text>
+    <rect x="48" y="238" width="294" height="46" rx="9" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.2"/>
+    <text x="62" y="259" font-size="12.5" font-weight="700" fill="#374151">assets/</text>
+    <text x="62" y="276" font-size="11.5" fill="#6b7280">输出用的模板、图标、字体</text>
+    <rect x="272" y="244" width="60" height="18" rx="9" fill="#e5e7eb"/>
+    <text x="302" y="257" text-anchor="middle" font-size="10.5" font-weight="700" fill="#6b7280">可选</text>
 
     <!-- 右侧说明 -->
     <rect x="392" y="60" width="398" height="76" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.2"/>
-    <text x="410" y="84" font-size="13" font-weight="700" fill="#1e3a8a">只有 SKILL.md 是必需的</text>
-    <text x="410" y="106" font-size="12" fill="#334155">没有它，AI 根本不知道有这个技能存在。</text>
-    <text x="410" y="125" font-size="12" fill="#334155">其余三个目录都是「锦上添花」。</text>
+    <text x="410" y="84" font-size="13" font-weight="700" fill="#1e40af">只有 SKILL.md 是必需的</text>
+    <text x="410" y="106" font-size="12" fill="#374151">没有它，AI 根本不知道有这个技能存在。</text>
+    <text x="410" y="125" font-size="12" fill="#374151">其余三个目录都是「锦上添花」。</text>
 
-    <rect x="392" y="152" width="398" height="76" rx="10" fill="#fffbeb" stroke="#fde68a" stroke-width="1.2"/>
-    <text x="410" y="176" font-size="13" font-weight="700" fill="#92400e">为什么要分目录？</text>
-    <text x="410" y="198" font-size="12" fill="#334155">因为 AI 的「记忆空间」有限。</text>
-    <text x="410" y="217" font-size="12" fill="#334155">分开存放，才能做到「用哪个取哪个」。</text>
+    <rect x="392" y="152" width="398" height="76" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.2"/>
+    <text x="410" y="176" font-size="13" font-weight="700" fill="#374151">为什么要分目录？</text>
+    <text x="410" y="198" font-size="12" fill="#6b7280">因为 AI 的「记忆空间」有限。</text>
+    <text x="410" y="217" font-size="12" fill="#6b7280">分开存放，才能做到「用哪个取哪个」。</text>
 
-    <rect x="392" y="244" width="398" height="76" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.2"/>
-    <text x="410" y="268" font-size="13" font-weight="700" fill="#166534">SKILL.md 别写太长</text>
-    <text x="410" y="290" font-size="12" fill="#334155">官方建议控制在 500 行以内，</text>
-    <text x="410" y="309" font-size="12" fill="#334155">超了就拆到 references/ 里。</text>
+    <rect x="392" y="244" width="398" height="76" rx="10" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.2"/>
+    <text x="410" y="268" font-size="13" font-weight="700" fill="#374151">SKILL.md 别写太长</text>
+    <text x="410" y="290" font-size="12" fill="#6b7280">官方建议控制在 500 行以内，</text>
+    <text x="410" y="309" font-size="12" fill="#6b7280">超了就拆到 references/ 里。</text>
   </svg>
   <div class="cap">
     技能包的<b>标准目录结构</b>：一份必需的核心文件 + 三类可选资源。
@@ -304,61 +299,56 @@
   <code>assets/</code> 是现成的模板和封面图。后三样有就放着，没有也不影响开工。
 </div>
 
-<!-- ===================== 图 3：渐进式加载 ===================== -->
+<!-- ===================== 图 3 ===================== -->
 <h2>③ 核心机制：渐进式加载<span class="en">Progressive Disclosure</span></h2>
 
 <div class="fig">
   <svg viewBox="0 0 820 400" role="img" aria-label="渐进式加载三层机制示意图">
     <defs>
-      <marker id="ar2" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+      <marker id="a2" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
         <path d="M0,0 L8,3.5 L0,7 z" fill="#2563eb"/>
       </marker>
     </defs>
 
     <!-- 第一层 -->
-    <rect x="30" y="20" width="760" height="88" rx="12" fill="#ecfeff" stroke="#67e8f9" stroke-width="1.6"/>
-    <circle cx="66" cy="64" r="19" fill="#0891b2"/>
+    <rect x="30" y="20" width="760" height="88" rx="12" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5"/>
+    <circle cx="66" cy="64" r="19" fill="#9ca3af"/>
     <text x="66" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">1</text>
-    <text x="102" y="52" font-size="14" font-weight="700" fill="#0e7490">第一层：常驻的「名片」</text>
-    <text x="102" y="74" font-size="12.5" fill="#334155">只有 name（技能名）+ description（什么时候用我）一直待在 AI 的视野里。</text>
-    <text x="102" y="94" font-size="12" fill="#64748b">占用极小，所以可以同时装几百个技能。</text>
-    <rect x="660" y="46" width="112" height="26" rx="13" fill="#0891b2"/>
-    <text x="716" y="64" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">≈ 50 字</text>
+    <text x="102" y="52" font-size="14" font-weight="700" fill="#374151">第一层：常驻的「名片」</text>
+    <text x="102" y="74" font-size="12.5" fill="#6b7280">只有 name（技能名）+ description（什么时候用我）一直待在 AI 的视野里。</text>
+    <text x="102" y="94" font-size="12" fill="#9ca3af">占用极小，所以可以同时装几百个技能。</text>
+    <rect x="660" y="46" width="112" height="26" rx="13" fill="#e5e7eb"/>
+    <text x="716" y="64" text-anchor="middle" font-size="11.5" font-weight="700" fill="#6b7280">约 50 字</text>
 
     <!-- 箭头 -->
-    <path d="M410 116 L 410 142" stroke="#2563eb" stroke-width="2.5" marker-end="url(#ar2)"/>
+    <path d="M410 116 L 410 142" stroke="#2563eb" stroke-width="2.5" marker-end="url(#a2)"/>
     <text x="452" y="134" font-size="12" fill="#2563eb" font-weight="600">判断「这个任务需要我」</text>
 
     <!-- 第二层 -->
-    <rect x="30" y="150" width="760" height="88" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.6"/>
+    <rect x="30" y="150" width="760" height="88" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
     <circle cx="66" cy="194" r="19" fill="#2563eb"/>
     <text x="66" y="200" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">2</text>
-    <text x="102" y="182" font-size="14" font-weight="700" fill="#1d4ed8">第二层：翻开说明书正文</text>
-    <text x="102" y="204" font-size="12.5" fill="#334155">AI 主动读取完整的 SKILL.md，按里面的步骤开始干活。</text>
-    <text x="102" y="224" font-size="12" fill="#64748b">到这一步，「怎么做」的指令才真正进入记忆。</text>
+    <text x="102" y="182" font-size="14" font-weight="700" fill="#1e40af">第二层：翻开说明书正文</text>
+    <text x="102" y="204" font-size="12.5" fill="#374151">AI 主动读取完整的 SKILL.md，按里面的步骤开始干活。</text>
+    <text x="102" y="224" font-size="12" fill="#9ca3af">到这一步，「怎么做」的指令才真正进入记忆。</text>
     <rect x="660" y="176" width="112" height="26" rx="13" fill="#2563eb"/>
-    <text x="716" y="194" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">≈ 500 字</text>
+    <text x="716" y="194" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">约 500 字</text>
 
     <!-- 箭头 -->
-    <path d="M410 246 L 410 272" stroke="#7c3aed" stroke-width="2.5" marker-end="url(#ar3)"/>
-    <defs>
-      <marker id="ar3" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
-        <path d="M0,0 L8,3.5 L0,7 z" fill="#7c3aed"/>
-      </marker>
-    </defs>
-    <text x="452" y="264" font-size="12" fill="#7c3aed" font-weight="600">只在真的需要时才取</text>
+    <path d="M410 246 L 410 272" stroke="#2563eb" stroke-width="2.5" marker-end="url(#a2)"/>
+    <text x="452" y="264" font-size="12" fill="#2563eb" font-weight="600">只在真的需要时才取</text>
 
     <!-- 第三层 -->
-    <rect x="30" y="280" width="760" height="96" rx="12" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.6"/>
-    <circle cx="66" cy="328" r="19" fill="#7c3aed"/>
-    <text x="66" y="334" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">3</text>
-    <text x="102" y="312" font-size="14" font-weight="700" fill="#5b21b6">第三层：按需调阅的「附件」</text>
-    <text x="102" y="334" font-size="12.5" fill="#334155">references/ 里的详细资料，只在遇到具体场景时才翻。</text>
-    <text x="102" y="354" font-size="12" fill="#64748b">这样就能把「一整本书」塞进技能包，却不用担心撑爆记忆空间。</text>
-    <rect x="648" y="306" width="124" height="26" rx="13" fill="#7c3aed"/>
+    <rect x="30" y="280" width="760" height="96" rx="12" fill="#1e40af"/>
+    <circle cx="66" cy="328" r="19" fill="#fff"/>
+    <text x="66" y="334" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">3</text>
+    <text x="102" y="312" font-size="14" font-weight="700" fill="#fff">第三层：按需调阅的「附件」</text>
+    <text x="102" y="334" font-size="12.5" fill="rgba(255,255,255,.9)">references/ 里的详细资料，只在遇到具体场景时才翻。</text>
+    <text x="102" y="354" font-size="12" fill="rgba(255,255,255,.7)">这样就能把「一整本书」塞进技能包，却不用担心撑爆记忆空间。</text>
+    <rect x="648" y="306" width="124" height="26" rx="13" fill="rgba(255,255,255,.2)"/>
     <text x="710" y="324" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">2000 字以上</text>
 
-    <text x="410" y="394" text-anchor="middle" font-size="12" fill="#64748b" font-style="italic">
+    <text x="410" y="394" text-anchor="middle" font-size="12" fill="#9ca3af" font-style="italic">
       越往下，内容越厚，但取用越克制 —— 这就是「渐进式披露」
     </text>
   </svg>
@@ -369,15 +359,15 @@
 </div>
 
 <div class="tiers">
-  <div class="tier t1">
+  <div class="tier">
     <div class="no">1</div>
     <div><h4>先看目录</h4><p>所有技能的名片都摆在桌上，但只有一行字。AI 扫一眼就知道该不该伸手。</p></div>
   </div>
-  <div class="tier t2">
+  <div class="tier">
     <div class="no">2</div>
     <div><h4>再翻章节</h4><p>确定了要用，才把这份说明书完整读进来，照着步骤执行。</p></div>
   </div>
-  <div class="tier t3">
+  <div class="tier">
     <div class="no">3</div>
     <div><h4>最后查附录</h4><p>遇到具体细节（比如「表格怎么填」），才去翻对应的资料文件。</p></div>
   </div>
@@ -388,69 +378,67 @@
   真要用到某个数据了才去查具体那一页（第三层）。没人会把整个图书馆搬回家。
 </div>
 
-<!-- ===================== 图 4：5 步流程 ===================== -->
+<!-- ===================== 图 4 ===================== -->
 <h2>④ 完整工作流程<span class="en">How it works</span></h2>
 
 <div class="fig">
   <svg viewBox="0 0 820 250" role="img" aria-label="Skill 工作五步流程图">
     <defs>
-      <marker id="ar4" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
-        <path d="M0,0 L8,3.5 L0,7 z" fill="#cbd5e1"/>
+      <marker id="a3" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+        <path d="M0,0 L8,3.5 L0,7 z" fill="#d1d5db"/>
+      </marker>
+      <marker id="a4" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
+        <path d="M0,0 L8,3.5 L0,7 z" fill="#2563eb"/>
       </marker>
     </defs>
 
     <!-- 步骤 1 -->
-    <rect x="20" y="60" width="130" height="118" rx="12" fill="#ecfeff" stroke="#67e8f9" stroke-width="1.5"/>
-    <circle cx="85" cy="92" r="18" fill="#0891b2"/>
+    <rect x="20" y="60" width="130" height="118" rx="12" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5"/>
+    <circle cx="85" cy="92" r="18" fill="#9ca3af"/>
     <text x="85" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">1</text>
-    <text x="85" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#0e7490">你说需求</text>
-    <text x="85" y="154" text-anchor="middle" font-size="11" fill="#64748b">「帮我做份周报」</text>
+    <text x="85" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#374151">你说需求</text>
+    <text x="85" y="154" text-anchor="middle" font-size="11" fill="#9ca3af">「帮我做份周报」</text>
 
-    <path d="M156 119 L 178 119" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#ar4)"/>
+    <path d="M156 119 L 178 119" stroke="#d1d5db" stroke-width="2.5" marker-end="url(#a3)"/>
 
     <!-- 步骤 2 -->
-    <rect x="184" y="60" width="130" height="118" rx="12" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5"/>
+    <rect x="184" y="60" width="130" height="118" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
     <circle cx="249" cy="92" r="18" fill="#2563eb"/>
     <text x="249" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">2</text>
-    <text x="249" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#1d4ed8">匹配技能</text>
-    <text x="249" y="154" text-anchor="middle" font-size="11" fill="#64748b">比对名片上的描述</text>
+    <text x="249" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">匹配技能</text>
+    <text x="249" y="154" text-anchor="middle" font-size="11" fill="#9ca3af">比对名片上的描述</text>
 
-    <path d="M320 119 L 342 119" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#ar4)"/>
+    <path d="M320 119 L 342 119" stroke="#d1d5db" stroke-width="2.5" marker-end="url(#a3)"/>
 
     <!-- 步骤 3 -->
-    <rect x="348" y="60" width="130" height="118" rx="12" fill="#f5f3ff" stroke="#c4b5fd" stroke-width="1.5"/>
-    <circle cx="413" cy="92" r="18" fill="#7c3aed"/>
+    <rect x="348" y="60" width="130" height="118" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+    <circle cx="413" cy="92" r="18" fill="#2563eb"/>
     <text x="413" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">3</text>
-    <text x="413" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#5b21b6">加载照做</text>
-    <text x="413" y="154" text-anchor="middle" font-size="11" fill="#64748b">读 SKILL.md 并执行</text>
+    <text x="413" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">加载照做</text>
+    <text x="413" y="154" text-anchor="middle" font-size="11" fill="#9ca3af">读 SKILL.md 并执行</text>
 
-    <path d="M484 119 L 506 119" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#ar4)"/>
+    <path d="M484 119 L 506 119" stroke="#d1d5db" stroke-width="2.5" marker-end="url(#a3)"/>
 
     <!-- 步骤 4 -->
-    <rect x="512" y="60" width="130" height="118" rx="12" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5"/>
-    <circle cx="577" cy="92" r="18" fill="#16a34a"/>
+    <rect x="512" y="60" width="130" height="118" rx="12" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5"/>
+    <circle cx="577" cy="92" r="18" fill="#2563eb"/>
     <text x="577" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">4</text>
-    <text x="577" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">产出交付</text>
-    <text x="577" y="154" text-anchor="middle" font-size="11" fill="#64748b">给你可用的结果</text>
+    <text x="577" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#1e40af">产出交付</text>
+    <text x="577" y="154" text-anchor="middle" font-size="11" fill="#9ca3af">给你可用的结果</text>
 
-    <path d="M648 119 L 670 119" stroke="#cbd5e1" stroke-width="2.5" marker-end="url(#ar4)"/>
+    <path d="M648 119 L 670 119" stroke="#d1d5db" stroke-width="2.5" marker-end="url(#a3)"/>
 
     <!-- 步骤 5 -->
-    <rect x="676" y="60" width="124" height="118" rx="12" fill="#fffbeb" stroke="#fde68a" stroke-width="1.5"/>
-    <circle cx="738" cy="92" r="18" fill="#d97706"/>
-    <text x="738" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">5</text>
-    <text x="738" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#92400e">复盘改进</text>
-    <text x="738" y="154" text-anchor="middle" font-size="11" fill="#64748b">过时就修正它</text>
+    <rect x="676" y="60" width="124" height="118" rx="12" fill="#1e40af"/>
+    <circle cx="738" cy="92" r="18" fill="#fff"/>
+    <text x="738" y="98" text-anchor="middle" font-size="14" font-weight="700" fill="#1e40af">5</text>
+    <text x="738" y="132" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">复盘改进</text>
+    <text x="738" y="154" text-anchor="middle" font-size="11" fill="rgba(255,255,255,.75)">过时就修正它</text>
 
     <!-- 回环箭头 -->
     <path d="M738 186 Q 738 220 413 220 Q 85 220 85 186"
-          fill="none" stroke="#d97706" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ar5)"/>
-    <defs>
-      <marker id="ar5" markerWidth="10" markerHeight="10" refX="8" refY="3.5" orient="auto">
-        <path d="M0,0 L8,3.5 L0,7 z" fill="#d97706"/>
-      </marker>
-    </defs>
-    <text x="413" y="240" text-anchor="middle" font-size="12" fill="#92400e" font-weight="600">
+          fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#a4)"/>
+    <text x="413" y="240" text-anchor="middle" font-size="12" fill="#1e40af" font-weight="600">
       技能越用越好用 —— 这是个会进化的资产
     </text>
   </svg>
@@ -465,7 +453,7 @@
   记者按采访规范去跑（加载照做）→ 交稿（产出交付）→ 编后复盘，把好经验写进采编手册（复盘改进）。
 </div>
 
-<!-- ===================== 图 5：对比 ===================== -->
+<!-- ===================== 图 5 ===================== -->
 <h2>⑤ 关键区分：Skill 不是什么<span class="en">Skill vs Prompt vs MCP</span></h2>
 
 <table class="cmp">
@@ -486,21 +474,21 @@
     </tr>
     <tr>
       <td>能否跨对话复用</td>
-      <td>✅ 可以，装在本地长期使用</td>
-      <td>❌ 换个对话就没了</td>
-      <td>✅ 可以，但属于工具层</td>
+      <td class="yes">可以，装在本地长期使用</td>
+      <td class="no">换个对话就没了</td>
+      <td class="yes">可以，但属于工具层</td>
     </tr>
     <tr>
       <td>AI 会主动调用吗</td>
-      <td>✅ 靠 description 自动匹配触发</td>
-      <td>❌ 必须你每次手动说</td>
-      <td>✅ 由 AI 决定何时调用</td>
+      <td class="yes">靠 description 自动匹配触发</td>
+      <td class="no">必须你每次手动说</td>
+      <td class="yes">由 AI 决定何时调用</td>
     </tr>
     <tr>
       <td>能否版本管理</td>
-      <td>✅ 就是一个文件夹，可用 Git 管理</td>
-      <td>❌ 难以沉淀</td>
-      <td>⚠️ 配置可管理，能力在外部</td>
+      <td class="yes">就是一个文件夹，可用 Git 管理</td>
+      <td class="no">难以沉淀</td>
+      <td>配置可管理，能力在外部</td>
     </tr>
     <tr>
       <td>解决什么问题</td>
@@ -516,45 +504,45 @@
   前者是方法论，后者是工具箱。<span class="ref">来源①④</span>
 </div>
 
-<!-- ===================== 图 6：示例 ===================== -->
+<!-- ===================== 图 6 ===================== -->
 <h2>⑥ 一个最小示例<span class="en">Minimal example</span></h2>
 
 <div class="fig">
   <svg viewBox="0 0 820 210" role="img" aria-label="SKILL.md 内容结构示意">
-    <rect x="24" y="18" width="772" height="174" rx="12" fill="#0f172a"/>
+    <rect x="24" y="18" width="772" height="174" rx="12" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1.5"/>
 
     <!-- 行号栏 -->
-    <rect x="24" y="18" width="42" height="174" rx="12" fill="#1e293b"/>
-    <rect x="54" y="18" width="12" height="174" fill="#1e293b"/>
-    <text x="45" y="48" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">1</text>
-    <text x="45" y="70" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">2</text>
-    <text x="45" y="92" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">3</text>
-    <text x="45" y="114" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">4</text>
-    <text x="45" y="140" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">5</text>
-    <text x="45" y="162" text-anchor="middle" font-size="11" fill="#64748b" font-family="monospace">6</text>
+    <rect x="24" y="18" width="42" height="174" rx="12" fill="#f3f4f6"/>
+    <rect x="54" y="18" width="12" height="174" fill="#f3f4f6"/>
+    <text x="45" y="48" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">1</text>
+    <text x="45" y="70" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">2</text>
+    <text x="45" y="92" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">3</text>
+    <text x="45" y="114" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">4</text>
+    <text x="45" y="140" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">5</text>
+    <text x="45" y="162" text-anchor="middle" font-size="11" fill="#9ca3af" font-family="monospace">6</text>
 
     <!-- 代码 -->
-    <text x="82" y="48" font-size="12.5" fill="#64748b" font-family="monospace">---</text>
+    <text x="82" y="48" font-size="12.5" fill="#9ca3af" font-family="monospace">---</text>
     <text x="82" y="70" font-size="12.5" font-family="monospace">
-      <tspan fill="#7dd3fc">name:</tspan><tspan fill="#e2e8f0"> weekly-report</tspan>
+      <tspan fill="#1e40af" font-weight="700">name:</tspan><tspan fill="#374151"> weekly-report</tspan>
     </text>
     <text x="82" y="92" font-size="12.5" font-family="monospace">
-      <tspan fill="#7dd3fc">description:</tspan><tspan fill="#86efac"> 当用户要生成/撰写周报时使用</tspan>
+      <tspan fill="#1e40af" font-weight="700">description:</tspan><tspan fill="#6b7280"> 当用户要生成/撰写周报时使用</tspan>
     </text>
-    <text x="82" y="114" font-size="12.5" fill="#64748b" font-family="monospace">---</text>
-    <text x="82" y="140" font-size="12.5" fill="#c4b5fd" font-family="monospace">## 执行步骤</text>
-    <text x="82" y="162" font-size="12.5" fill="#e2e8f0" font-family="monospace">1. 汇总本周 notes/ 与 code/ 的改动</text>
+    <text x="82" y="114" font-size="12.5" fill="#9ca3af" font-family="monospace">---</text>
+    <text x="82" y="140" font-size="12.5" fill="#374151" font-weight="700" font-family="monospace">## 执行步骤</text>
+    <text x="82" y="162" font-size="12.5" fill="#6b7280" font-family="monospace">1. 汇总本周 notes/ 与 code/ 的改动</text>
 
     <!-- 标注 -->
     <rect x="560" y="56" width="212" height="46" rx="8" fill="#2563eb"/>
     <text x="666" y="76" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">上半段：元信息（YAML）</text>
-    <text x="666" y="93" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.9)">决定 AI 何时会调用这个技能</text>
+    <text x="666" y="93" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.88)">决定 AI 何时会调用这个技能</text>
     <path d="M556 79 L 500 79" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="4 3"/>
 
-    <rect x="560" y="126" width="212" height="46" rx="8" fill="#7c3aed"/>
+    <rect x="560" y="126" width="212" height="46" rx="8" fill="#1e40af"/>
     <text x="666" y="146" text-anchor="middle" font-size="11.5" font-weight="700" fill="#fff">下半段：操作指令（Markdown）</text>
-    <text x="666" y="163" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.9)">告诉 AI 具体怎么干</text>
-    <path d="M556 149 L 500 149" stroke="#7c3aed" stroke-width="1.8" stroke-dasharray="4 3"/>
+    <text x="666" y="163" text-anchor="middle" font-size="10.5" fill="rgba(255,255,255,.88)">告诉 AI 具体怎么干</text>
+    <path d="M556 149 L 500 149" stroke="#1e40af" stroke-width="1.8" stroke-dasharray="4 3"/>
   </svg>
   <div class="cap">
     一份 SKILL.md 就两段：<b>上半段说「我是谁、什么时候用我」</b>，
@@ -571,7 +559,7 @@
 <h2>⑦ 用好技能的三条纪律<span class="en">Three disciplines</span></h2>
 <div class="grid3">
   <div class="dcard">
-    <h3>🎯 匹配才触发</h3>
+    <h3>匹配才触发</h3>
     <ul>
       <li>技能和需求对得上，才加载</li>
       <li>不相关绝不生搬硬套</li>
@@ -579,7 +567,7 @@
     </ul>
   </div>
   <div class="dcard">
-    <h3>✅ 按指令执行</h3>
+    <h3>按指令执行</h3>
     <ul>
       <li>加载后立即照做</li>
       <li>不跳过步骤、不自行发挥</li>
@@ -587,7 +575,7 @@
     </ul>
   </div>
   <div class="dcard">
-    <h3>🔁 用过即复盘</h3>
+    <h3>用过即复盘</h3>
     <ul>
       <li>发现过时或错误就修正</li>
       <li>让技能持续进化不退化</li>
@@ -662,7 +650,7 @@
 
 <div class="score" id="scoreBox"></div>
 <div class="tip" id="finalTip">
-  🎯 若 5 题全对，说明你已经掌握了 Agent Skill 的核心心智模型：
+  若 5 题全对，说明你已经掌握了 Agent Skill 的核心心智模型：
   <b>识别触发 → 加载指令 → 照做执行 → 复盘进化</b>。接下来不妨自己动手写一个 Skill 试试。
 </div>
 
@@ -709,7 +697,7 @@
     var right = keys.filter(function(k){ return answered[k]; }).length;
     var box = document.getElementById('scoreBox');
     box.style.display = 'block';
-    box.textContent = '📊 你的得分：' + right + ' / 5' +
+    box.textContent = '你的得分：' + right + ' / 5' +
       (right >= 4 ? ' — 优秀，核心已掌握！' : (right >= 3 ? ' — 不错，再巩固一下！' : ' — 建议重读上方图解'));
     document.getElementById('finalTip').style.display = 'block';
   }
