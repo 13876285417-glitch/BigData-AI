@@ -1,0 +1,55 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ===== 虚拟环境 =====
+.venv/
+venv/
+env/
+ENV/
+
+# ===== Jupyter Notebook =====
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ===== 测试与覆盖率 =====
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ===== macOS =====
+# AppleDouble 资源分叉文件（外接硬盘 / U 盘上常见，会污染仓库）
+._*
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# ===== 编辑器 =====
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+
+# ===== 数据文件（大文件不进版本库）=====
+data/*.csv
+data/*.xlsx
+data/*.json
+!data/.gitkeep
+
+# ===== 密钥与本地配置 =====
+.env
+*.key
+*.pem
+
+# ===== WorkBuddy =====
+# skills/ 是仓库级技能，要提交（课程要求）
+# memory/ 是本地工作笔记，含个人上下文，不提交到公开仓库
+.workbuddy/memory/

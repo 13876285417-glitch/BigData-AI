@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 08 课 · 文件读写：让处理结果留下来 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="07-functions.html">← 上一课</a>
+  <a href="09-regex-and-exceptions.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 08 课 · 文件读写：让处理结果留下来 · 一分钟掌握</h1>
+  <div class="sub">批量读稿、结果存成表格，遇到乱码知道那是编码问题</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段二 · 第 8 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">batch_files.py</code>
+  —— 批量读取文件夹里的稿件，清洗后把字数、句数、关键词统计写成一份可直接交付的结果 CSV。<br>
+  <b>新闻场景：</b>一次性读完文件夹里 50 份稿子，输出 results.csv，双击用 Excel 打开就能交给编辑核对。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 8 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"官方教程 · 第 7 章「输入与输出」（读写文件）", why:"open()、文件模式、with 语句与逐行读取的官方定义与示例，是「文件到底怎么开怎么写」的第一手依据", url:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" },
+    { name:"官方文档 · csv 模块（CSV 文件读写）", why:"csv.reader / csv.writer 的官方签名，含「写文件时应以 newline='' 打开」这一明确提醒", url:"https://docs.python.org/zh-cn/3/library/csv.html" },
+    { name:"官方文档 · json 模块（JSON 编解码）", why:"json.load / json.dump 与 ensure_ascii、indent 参数的官方说明，解释了中文为什么会变成转义序列", url:"https://docs.python.org/zh-cn/3/library/json.html" },
+    { name:"官方文档 · pathlib（面向对象的文件系统路径）", why:"Path.glob()、read_text() 等接口的官方定义，是官方当前推荐的路径操作方式", url:"https://docs.python.org/zh-cn/3/library/pathlib.html" },
+    { name:"官方文档 · os（杂项操作系统接口）", why:"os.listdir、os.path 等传统接口的官方说明，用来对照理解 pathlib 的改进之处", url:"https://docs.python.org/zh-cn/3/library/os.html" },
+    { name:"官方 HOWTO · Unicode 与编码", why:"字符集与编码的官方科普，讲清「字节」与「字符」的区别，是理解中文乱码根因的权威材料", url:"https://docs.python.org/zh-cn/3/howto/unicode.html" }
+  ],
+  points: [
+    { t:"<b>打开文件的标准写法是 with open(...) as f:，缩进块结束时自动关闭文件 —— 中途抛异常也保证关闭。</b>手工 <code>f = open(...)</code> 又忘了 <code>f.close()</code>，一旦出错句柄不会释放，还在缓冲区里的内容可能根本没落盘。注意 with 块结束后文件就关了，后续读取必须在块内完成。", s:0 },
+    { t:"<b>模式决定能对文件做什么：'r' 只读、'w' 写入、'a' 追加。</b>最常见的误操作是 <code>'w'</code>：它会<b>先把已有文件清空</b>再写（文件不存在才新建），所以一个跑错的 <code>'w'</code> 能直接抹掉上次的统计结果。想保留旧内容就往末尾追加，用 <code>'a'</code>。", s:0 },
+    { t:"<b>一定要显式写 encoding=\"utf-8\"。</b>乱码的本质是<b>写的时候用的编码和读的时候用的编码不一致</b>：不指定 encoding 时 open() 会用系统默认编码（Windows 上常是 GBK / CP936），于是 UTF-8 存下的中文被按另一套规则解码，就成了「锟斤拷」那一串。自己写、自己读，就统一用 utf-8。", s:5 },
+    { t:"<b>三种读法各有场合：</b><code>f.read()</code> 一次把整个文件读成一个字符串；<code>f.readlines()</code> 读成一个「每行一个元素」的列表；<code>for line in f:</code> 逐行遍历。<b>大文件用逐行遍历</b>，它不会把整个文件同时塞进内存。", s:0 },
+    { t:"<b>f.write() 不会自动加换行。</b>它把你给的字符串原样写进去，要换行必须自己写 <code>\"\\n\"</code> —— 批量写文件时常见的 <code>f.write(line + \"\\n\")</code> 就是这个原因。另外 write() 只接受字符串，写数字要先 <code>str()</code> 转换。", s:0 },
+    { t:"<b>CSV 用标准库的 csv 模块，不要自己拼逗号。</b><code>csv.writer</code> 会替你处理逗号、引号、换行这些转义细节；写文件时按官方提醒用 <code>open(path, \"w\", encoding=\"utf-8\", newline=\"\")</code>，否则在部分平台上每行之间会多出一个空行。读回来用 <code>csv.reader</code>，迭代得到的是每行的字段列表。", s:1 },
+    { t:"<b>JSON 用 json.load() / json.dump()。</b>写中文必须加两个参数：<code>json.dump(obj, f, ensure_ascii=False, indent=2)</code> —— <code>ensure_ascii=False</code> 才不会把中文写成 <code>\\uXXXX</code> 转义码，<code>indent=2</code> 则让文件分层缩进、人能直接看懂。读回来用 <code>json.load(f)</code>，得到的是原样的字典 / 列表。", s:2 },
+    { t:"<b>批量处理目录用 pathlib：Path(\"文件夹\").glob(\"*.txt\") 直接拿到该目录下所有 txt 的路径对象</b>，每个对象还能继续 <code>.name</code> 取文件名、<code>.read_text(encoding=\"utf-8\")</code> 直接读内容。传统写法 <code>os.listdir()</code> 只给你一堆文件名字符串，你还得自己拼路径、自己判断后缀。", s:3,
+      pre:"import csv\nfrom pathlib import Path\n\nrows = [[\"文件\", \"字数\"]]          # 表头\nfor p in Path(\"drafts\").glob(\"*.txt\"):\n    text = p.read_text(encoding=\"utf-8\")\n    rows.append([p.name, len(text)])\n\n# newline=\"\" 防止每行之间多出空行\nwith open(\"results.csv\", \"w\", encoding=\"utf-8\", newline=\"\") as f:\n    csv.writer(f).writerows(rows)\n\nprint(f\"已写出 {len(rows) - 1} 条统计到 results.csv\")" }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"打开文件准备写入时，用哪种模式会把文件里原有的内容清空？",
+        opts:["'r'","'w'","'a'","'rb'"],
+        ans:1,
+        exp:"'w' 表示以写入方式打开，会先清空已有内容（文件不存在则新建），这是最常见的误操作 —— 想保留旧数据千万别用它。'a' 是追加、写在末尾，'r' 只读，拿只读的句柄去写会报 io.UnsupportedOperation。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" },
+      { q:"打开一份中文稿子时，最该补上哪个参数来避免读到乱码？",
+        opts:["mode=\"r\"","encoding=\"utf-8\"","newline=\"\"","buffering=1"],
+        ans:1,
+        exp:"乱码的本质是写入时用的编码和读取时用的编码不一致。不指定 encoding，open() 会用系统默认编码，于是 UTF-8 保存的中文被按另一套规则解码成乱码。明确写 encoding=\"utf-8\" 是跨平台最稳的做法。",
+        src:"https://docs.python.org/zh-cn/3/howto/unicode.html" },
+      { q:"执行 f.write(\"第一行\") 之后，文件里会是什么样？",
+        opts:["自动补上一个换行","内容原样写入，不会自动加换行","报错，write 不接受字符串","内容被写到文件开头并覆盖全文"],
+        ans:1,
+        exp:"write() 只把你给的字符串原样写进去，不补任何换行，所以要在下一行继续写就得自己加 \"\\n\"。批量写文件时常见的 f.write(line + \"\\n\") 就是这个原因。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" }
+    ],
+    medium: [
+      { q:"要把统计结果交给同事用 Excel 直接打开，最合适的格式与写法是？",
+        opts:["用 print 把结果打到屏幕上，让同事复制","用 csv.writer 写 .csv，open 时带 newline=\"\"","用 f.write 手拼字符串，遇到逗号自己转义","用 json.dump 写一个后缀为 .csv 的文件"],
+        ans:1,
+        exp:"csv 是 Excel 能直接双击打开的通用格式，标准库的 csv 模块负责处理逗号、引号、换行这些转义细节，比自己拼字符串可靠得多。官方文档特别提醒：写文件时用 newline=\"\" 打开，否则在部分平台上每行之间会多出一个空行。",
+        src:"https://docs.python.org/zh-cn/3/library/csv.html" },
+      { q:"文件夹里有 50 份稿件、每份可能很大，只想逐行统计某个关键词出现的次数。应该怎么读？",
+        opts:["text = f.read() 一次全部读进内存再切分","for line in f: 逐行遍历","f.readlines() 读成列表再逐条遍历","把 50 个文件都 read() 后拼成一个大字符串"],
+        ans:1,
+        exp:"逐行遍历是内存友好的惯用写法，一次只在内存里保存一行。read() 会把整个文件读成一个大字符串，readlines() 会生成包含全部行的列表，四者相加可能直接把内存吃满，处理大文件夹时尤其危险。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" },
+      { q:"想在文件夹 drafts 下找出所有 .txt 稿件，用 pathlib 应该怎么写？",
+        opts:["Path(\"drafts\").glob(\"*.txt\")","Path(\"drafts\").open(\"*.txt\")","Path(\"drafts\").glob()","Path(\"*.txt\").glob(\"drafts\")"],
+        ans:0,
+        exp:"Path.glob() 用通配符匹配目录下的路径，返回的是 Path 对象，可以继续用 .name 取文件名、.read_text() 读内容。os.listdir() 只能列出名字字符串，还得自己拼路径、过滤后缀 —— 这正是官方更推荐 pathlib 的原因。",
+        src:"https://docs.python.org/zh-cn/3/library/pathlib.html" }
+    ],
+    hard: [
+      { q:"下面几种打开文件的方式，哪一种最应该被改成别的写法？",
+        opts:["with open(p, encoding=\"utf-8\") as f:","f = open(p, encoding=\"utf-8\") 用完忘记 f.close()","with open(p, \"a\", encoding=\"utf-8\") as f:","with open(p, \"w\", encoding=\"utf-8\", newline=\"\") as f:"],
+        ans:1,
+        exp:"手工 open 却不 close，文件句柄不会被释放；如果中途抛异常，缓冲区里还没写进磁盘的数据也可能丢。with 是官方推荐写法：离开代码块时自动关闭文件，即使块内发生异常也会关闭。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" },
+      { q:"用 json.dump(data, f) 而不加 ensure_ascii=False，文件里的中文会变成什么样？",
+        opts:["中文正常显示","中文被写成 \\uXXXX 形式的转义序列","抛异常，JSON 不支持中文","中文被直接丢弃"],
+        ans:1,
+        exp:"json.dump 默认 ensure_ascii=True，会把所有非 ASCII 字符转义成 \\uXXXX。数据其实没丢，程序读回来完全正确，但人打开文件只看到一串转义码，没法直接核对。加上 ensure_ascii=False 并保证 encoding=\"utf-8\"，中文才能肉眼可读。",
+        src:"https://docs.python.org/zh-cn/3/library/json.html" },
+      { q:"脚本里用 \"w\" 模式每次重写同一个 results.csv。第二次运行脚本时，文件里会是什么？",
+        opts:["只剩表头一行","本次写入的表头加数据行，上次的内容已被清空","上次的内容加上本次的表头与数据行","报错，文件已存在"],
+        ans:1,
+        exp:"每次以 'w' 打开都会先清空文件再写，所以结果永远是当次写进去的那几行 —— 这既是「反复运行不会越写越乱」的好处，也是「误用 'w' 打开旧数据文件」会直接丢数据的风险来源。要保留历史记录就改用 'a' 追加。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/inputoutput.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

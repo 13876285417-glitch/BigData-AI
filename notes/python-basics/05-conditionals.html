@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 05 课 · 条件判断：让程序学会做选择 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+  .opt code{background:#f1f5f9;color:#1d4ed8;padding:1px 4px;border-radius:3px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="04-dicts-and-sets.html">← 上一课</a>
+  <a href="06-loops.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 05 课 · 条件判断：让程序学会做选择 · 一分钟掌握</h1>
+  <div class="sub">把发稿规矩写成代码，多重条件也不写乱</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段二 · 第 5 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">check_article.py</code>
+  —— 一条能自动跑的发稿前自检清单，逐项给出提示与严重等级。<br>
+  <b>新闻场景：</b>发稿前自检 —— 标题超长？含敏感词？缺时间地点要素？逐条给出提示与严重等级。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 5 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"官方教程 · 第 4 章「其他流程控制工具」（if 语句）", why:"if / elif / else 的官方语法定义与执行顺序说明，是判断「分支到底怎么走」的第一手依据", url:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+    { name:"官方参考 · 表达式（布尔运算、条件表达式、身份比较）", why:"and / or / not 的短路求值规则、x if c else y 的条件表达式、is 与 is not 的官方精确定义", url:"https://docs.python.org/zh-cn/3/reference/expressions.html" },
+    { name:"官方文档 · 内置类型（真值检验 Truth Value Testing）", why:"明确规定哪些值被判为假：None、False、数值零、空字符串、空序列、空字典 —— 这是 if not text 写法的官方依据", url:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+    { name:"官方参考 · 词法分析（缩进与行结构）", why:"说明「用缩进划分代码块」是 Python 的语法要求，以及缩进不一致会抛 IndentationError 的官方表述", url:"https://docs.python.org/zh-cn/3/reference/lexical_analysis.html" }
+  ],
+  points: [
+    { t:"<b>if / elif / else 从上到下依次判断，第一个成立的分支执行完就跳出整条链。</b>所以<b>书写的顺序就是优先级</b>：把最严格、最该先拦下的条件写在最前面。一旦某个分支命中，后面的 elif 根本不会被求值。", s:0 },
+    { t:"<b>== 判断相等，= 是赋值。</b>其余比较运算符是 <code>!=</code>、<code>&lt;</code>、<code>&lt;=</code>、<code>&gt;</code>、<code>&gt;=</code>，都是「问一个问题、回答 True 或 False」。在 if 里误写 <code>if x = 1:</code> 是 SyntaxError，解释器连执行都不会开始。", s:0 },
+    { t:"<b>and / or / not 会短路。</b><code>A and B</code>：A 为假就不再计算 B，整个表达式直接为假；<code>A or B</code>：A 为真就不再算 B，整体为真。这个特性常被用作保护写法 —— <code>if name and name[0] == \"张\":</code>，先确认 name 非空，再取它的首字符，顺序反了就可能出错。", s:1 },
+    { t:"<b>in / not in 做成员判断。</b><code>if \"暴雨\" in title:</code> 判断子串存在与否，<code>if \"暴雨\" not in title:</code> 是它的反面。它比 find() 更清楚，因为 find 返回的是下标，而 <code>0</code> 在布尔语境里是假值，容易写出刚好反过来的 bug。", s:0 },
+    { t:"<b>空的东西都是假值。</b>官方规定被判为假的有：<code>None</code>、<code>False</code>、数值零（<code>0</code>、<code>0.0</code>）、空字符串 <code>\"\"</code>、空列表 <code>[]</code>、空字典 <code>{}</code>。所以 <code>if not text:</code> 比 <code>if len(text) == 0:</code> 更短也更地道。", s:2 },
+    { t:"<b>判断 None 要用 is None，不要用 == None。</b><code>is</code> 比的是「是不是同一个对象」，<code>None</code> 在 Python 里只有一个，用 is 最准确也最快。<code>==</code> 会去调用相等比较，遇到重载了比较逻辑的对象可能得到意外结果。同理，<code>if x is not None:</code>。", s:1 },
+    { t:"<b>条件表达式 x if 条件 else y 可以把 if-else 收进一行。</b>顺序是「真值在前、条件在中、假值在后」，和 C / Java 的 <code>条件 ? A : B</code> 顺序不同；<b>漏掉 else 是语法错误</b>。简单的二选一赋值用它更清爽。", s:1 },
+    { t:"<b>缩进就是语法。</b>Python 不用大括号划分代码块，而是靠缩进 —— 冒号后的块内语句必须比 if 多缩进一级，同一块内必须对齐；顶格写在下一行会抛 <code>IndentationError: expected an indented block</code>。空格和 Tab 混用尤其危险，选一种并保持一致。", s:3,
+      pre:"title = \"  暴雨橙色预警  \"\nclean = title.strip()\n\nif not clean:\n    print(\"⛔ 退回：标题为空\")\nelif len(clean) > 20:\n    print(\"⚠️ 标题超长，建议精简\")\nelif \"暴雨\" in clean and \"9月17日\" not in clean:\n    print(\"⚠️ 提到暴雨，但缺时间要素\")\nelse:\n    print(f\"✅ 自检通过：{clean}（{len(clean)} 字）\")" }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"在发稿自检里要判断分类字段 cat 是否等于 \"要闻\"，应该用哪个运算符？",
+        opts:["=","==","is","!="],
+        ans:1,
+        exp:"== 是「判断相等」，返回 True 或 False，可以直接放进 if。= 是赋值（写在 if 里是 SyntaxError）；is 比的是「是不是同一个对象」，对字符串做值比较应该用 ==。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"下面哪一个值放进 if 里会被判定为「假」？",
+        opts:["字符串 \"暴雨\"","数字 0","列表 [1]","只含一个空格的字符串 \" \""],
+        ans:1,
+        exp:"数值零、空字符串、空列表、空字典、None 都是假值。注意 \" \"（一个空格）长度是 1，属于真值 —— 这正是要先 strip() 再判断的原因，否则「看起来是空的」稿子会被放行。",
+        src:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+      { q:"在 if / elif / else 结构里，如果第一个 if 的条件成立了，后面的 elif 会怎样？",
+        opts:["继续逐个判断，可能执行多个分支","整条链直接跳出，后面的分支不再判断","抛语法错误","随机挑一个分支执行"],
+        ans:1,
+        exp:"if / elif / else 是一条链而不是一排独立的 if：第一个成立的分支执行完后立刻跳出。想让多个检查项都能命中，就必须把它们写成各自独立的 if，而不是一条 elif 链。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" }
+    ],
+    medium: [
+      { q:"要判断字符串变量 text 是不是空的，下面哪种写法最地道？",
+        opts:["if not text:","if text == None:","if text == False:","if text.isempty():"],
+        ans:0,
+        exp:"空字符串在真值检验里就是假，not text 一行同时覆盖了空串和 None 两种情况，既短又安全。字符串没有 isempty() 方法；用 == False 判断空串也是把布尔和字符串混为一谈。",
+        src:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+      { q:"要判断变量 author 还没有被赋值（值是 None），应该写？",
+        opts:["if author is None:","if author == None:","if author = None:","if None in author:"],
+        ans:0,
+        exp:"None 是单例对象，用 is 判断「是不是同一个」最准确、也最快。== 会走相等比较协议，遇到自定义类型可能被重载成别的含义；= 是赋值，写在 if 里直接是 SyntaxError；in 用于成员判断，对 None 不适用。",
+        src:"https://docs.python.org/zh-cn/3/reference/expressions.html" },
+      { q:"关于表达式 A and B 的短路求值，下面哪种说法是正确的？",
+        opts:["无论 A 是真是假，B 都一定会被计算","A 为假时 B 不会被计算，整个表达式直接判定为假","A 为真时整个表达式直接判定为真","and 要求两边都必须是字符串"],
+        ans:1,
+        exp:"and 只有在左边为真时才需要继续看右边，所以左边一假就短路。or 正好相反：左边为真就直接返回真。这个规则既能省计算，也是 <code>if name and name[0] == \"张\":</code> 这类保护写法的依据。",
+        src:"https://docs.python.org/zh-cn/3/reference/expressions.html" }
+    ],
+    hard: [
+      { q:"下面哪一段代码会引发 IndentationError？",
+        opts:["<code>if x:</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>print(1)</code>（块内缩进 4 个空格）",
+              "<code>if x: print(1)</code>（写在冒号后面同一行）",
+              "<code>if x:</code><br><code>print(1)</code>（下一行顶格，完全没有缩进）",
+              "<code>if x:</code><br>&nbsp;&nbsp;&nbsp;&nbsp;<code>print(1)</code>（块内缩进用 Tab）"],
+        ans:2,
+        exp:"冒号后面是一个代码块，块内语句必须比 if 多缩进一级；下一行顶格等于「if 后面什么都没有」，解释器会抛 IndentationError: expected an indented block。缩进用 4 空格或用 Tab 都能跑（只要全局一致），但混用会出问题 —— 统一用 4 空格最省事。",
+        src:"https://docs.python.org/zh-cn/3/reference/lexical_analysis.html" },
+      { q:"编辑写了一段自检逻辑：<code>if len(title) &gt; 20:</code> 打印「标题超长」，<code>elif \"暴雨\" in title:</code> 打印「提到暴雨」。现在有一条 25 字、且含「暴雨」的标题，程序会输出什么？",
+        opts:["两行都打印","只打印「标题超长」","只打印「提到暴雨」","什么都不打印"],
+        ans:1,
+        exp:"if / elif 是一条链，第一个条件成立并执行完后立即跳出，elif 连求值都不会进行 —— 哪怕它其实也成立。想让两条提示都能出现，应该拆成两个独立的 if；如果是有意按优先级只报一条，那就要保证顺序符合业务优先级。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"想让 score 为 0（未评分）时显示「未评分」、否则显示分数本身，下面哪一行写法是正确的？",
+        opts:["label = \"未评分\" if not score else score","label = if score then \"未评分\"","label = not score ? \"未评分\" : score","label = \"未评分\" if score"],
+        ans:0,
+        exp:"Python 的条件表达式写作「真值 if 条件 else 假值」，顺序和 C / Java 的三元运算符不同，而且 else 部分不能省略（漏了就是 SyntaxError）。score 为 0 时 not score 为真，所以显示「未评分」。",
+        src:"https://docs.python.org/zh-cn/3/reference/expressions.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

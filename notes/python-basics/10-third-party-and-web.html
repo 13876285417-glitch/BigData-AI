@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 10 课 · 第三方库与网页数据获取 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="09-regex-and-exceptions.html">← 上一课</a>
+  <a href="11-pandas-basics.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 10 课 · 第三方库与网页数据获取 · 一分钟掌握</h1>
+  <div class="sub">让数据自己到手，同时清楚抓取的法律与伦理边界</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段三 · 第 10 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">fetch_news.py</code>
+  + 抓取结果 CSV
+  —— 抓取一个公开新闻列表页的标题与链接（30 条以内）存成 CSV。<br>
+  <b>新闻场景：</b>某一个栏目的稿件清单每天要手工复制粘贴，改成脚本自动取回；动手之前先读目标站点的 robots.txt 与使用条款。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 10 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"pip 官方用户指南", why:"pip 是 Python 官方推荐的包安装工具，这份文档是「怎么装包、怎么按清单装包」的第一手说明", url:"https://pip.pypa.io/en/stable/user_guide/" },
+    { name:"Python 官方教程 · 虚拟环境与包", why:"官方教程用「两个应用要求不同版本」的实例讲清了为什么必须隔离环境，是虚拟环境最权威的入门解释", url:"https://docs.python.org/zh-cn/3/tutorial/venv.html" },
+    { name:"Requests 官方快速上手", why:"requests 官方入门文档，status_code、text、raise_for_status 等接口的原始定义与示例都在这里", url:"https://requests.readthedocs.io/en/latest/user/quickstart/" },
+    { name:"Requests 官方进阶指南", why:"超时、自定义请求头、会话等进阶用法的官方说明，是「为什么必须设 timeout」的依据", url:"https://requests.readthedocs.io/en/latest/user/advanced/" },
+    { name:"Beautiful Soup 官方文档", why:"BeautifulSoup 项目的官方文档，find_all、get_text、解析器选择等接口的权威说明", url:"https://beautiful-soup-4.readthedocs.io/en/latest/" },
+    { name:"IETF RFC 9309 · Robots Exclusion Protocol", why:"robots.txt 的正式国际标准（IETF 标准跟踪文档），定义了服务方控制爬虫访问的机器可读约定", url:"https://www.rfc-editor.org/rfc/rfc9309.html" },
+    { name:"Data Journalism Handbook · 从网页获取数据", why:"欧洲新闻中心出品的《数据新闻手册》官方在线版章节，专门讨论抓取公开数据时的隐私与合规边界", url:"https://datajournalism.com/read/handbook/one/getting-data/getting-data-from-the-web" }
+  ],
+  points: [
+    { t:"<b>PyPI 是 Python 的第三方包仓库，pip 是它的官方客户端。</b>需要什么能力，先查有没有现成的包：<code>pip install 包名</code> 装上之后就能 <code>import</code>。把项目依赖写进 <code>requirements.txt</code>，<code>pip install -r requirements.txt</code> 一次装齐 —— 这是把「我这台机器能跑」变成「同事的机器也能跑」的关键一步。", s:0 },
+    { t:"<b>为什么一定要用虚拟环境，以及怎么建：不同项目依赖的包版本常常互相冲突，装到全局迟早出事。</b>官方教程举的例子是：应用 A 需要某个库的 1.0 版，应用 B 需要 2.0 版，两者装不到一起，所以一个项目一个隔离环境。命令是 <code>python -m venv .venv</code>（在当前目录创建名为 .venv 的独立环境），激活后终端提示符前会出现环境名，此时 <code>pip install</code> 装的东西只进这个环境 —— macOS / Linux 用 <code>source .venv/bin/activate</code>，Windows 用 <code>.venv\\Scripts\\activate</code>。", s:1 },
+    { t:"<b>发一个 HTTP 请求：<code>resp = requests.get(url)</code>。</b>三个最常用的返回属性：<code>resp.status_code</code> 是状态码（<b>200 表示成功</b>）、<code>resp.text</code> 是解码后的网页源码（字符串，交给解析器用）、<code>resp.content</code> 是原始字节（图片、PDF 这类文件用它保存）。", s:2 },
+    { t:"<b>别只看状态码，用 <code>resp.raise_for_status()</code> 让失败当场抛异常。</b>4xx / 5xx 时 requests 并不会自动报错，它只是把错误页当作「正常响应」交给你 —— 于是你拿着 404 页面继续解析，抓出一堆空值却找不到原因。这一行会在拿到响应的当下抛出 HTTPError，让问题暴露在正确的行号上。", s:2 },
+    { t:"<b>请求必须设超时 <code>requests.get(url, timeout=10)</code>，否则程序可能永久挂住。</b>官方进阶指南把超时单列一节，就是因为默认值意味着「一直等」。另外用 <code>headers={\"User-Agent\": \"...\"}</code> 表明身份（谁在抓、怎么联系），既方便对方联系你，也是抓取者最基本的礼貌。", s:3 },
+    { t:"<b>BeautifulSoup 把 HTML 变成可检索的对象：</b>解析 <code>soup = BeautifulSoup(resp.text, \"html.parser\")</code>；<code>soup.find_all(\"a\")</code> 取出所有链接标签；<code>tag.get(\"href\")</code> 取属性值（<b>属性不存在时返回 None</b>，要判断）；<code>tag.get_text(strip=True)</code> 取标签内的纯文本并去掉首尾空白。", s:4,
+      pre:"import requests\nfrom bs4 import BeautifulSoup\n\nURL = \"https://example.com/news\"\n\nresp = requests.get(URL, timeout=10,\n                    headers={\"User-Agent\": \"student-research/0.1\"})\nresp.raise_for_status()          # 4xx / 5xx 立即抛异常，不再往下走\n\nsoup = BeautifulSoup(resp.text, \"html.parser\")\nfor a in soup.find_all(\"a\")[:5]:   # 先只看前 5 条，确认结构对了再全量\n    print(a.get_text(strip=True), \"->\", a.get(\"href\"))" },
+    { t:"<b>抓取前先读 robots.txt 和网站使用条款。</b>robots.txt 是机器可读的爬虫访问约定，由 IETF 在 RFC 9309 中定为标准，明确写了哪些路径允许、哪些禁止（Disallow）。它写在服务器根目录下，用浏览器打开目标站点的 /robots.txt 就能看到 —— 被禁止的路径不抓，是守法与守约的最低要求。", s:5 },
+    { t:"<b>四条抓取纪律：控制频率、只抓公开数据、不碰个人隐私、先读使用条款。</b>用 <code>time.sleep(1)</code> 把请求压到人类尺度，别让脚本变成压测工具；只取无需登录的公开页面；涉及个人信息的内容一律不抓 —— 手册明确指出，抓取可能侵犯个人隐私并触犯数据保护法规；页面的使用条款会另外规定允许的使用范围。", s:6 }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"小张第一次用 requests，终端里哪个命令是「安装这个包」的正确写法？",
+        opts:["pip install requests","import requests","python requests.py","pip requests"],
+        ans:0,
+        exp:"pip 是 Python 的包管理工具，install 后面直接跟包名；import 只是在代码里引用已经装好的包，包本身没装会直接 ModuleNotFoundError。",
+        src:"https://pip.pypa.io/en/stable/user_guide/" },
+      { q:"脚本抓一个正常存在的新闻页，resp.status_code 应该是多少？",
+        opts:["200","404","500","302"],
+        ans:0,
+        exp:"200 表示请求成功。404 是页面不存在，500 是服务器内部出错，302 是重定向 —— 官方快速上手就是用状态码判断请求结果的。",
+        src:"https://requests.readthedocs.io/en/latest/user/quickstart/" },
+      { q:"HTML 片段是 <code>&lt;a href=\"/a1\"&gt;暴雨橙色预警&lt;/a&gt;</code>，用 BeautifulSoup 取出「暴雨橙色预警」这段纯文字，用哪个方法？",
+        opts:["tag.get_text(strip=True)","tag.get(\"href\")","soup.find_all(\"a\")","resp.text"],
+        ans:0,
+        exp:"get_text() 取标签内部的文本内容，strip=True 顺手去掉首尾空白与换行；get(\"href\") 取的是属性值，find_all(\"a\") 取的是标签对象列表。",
+        src:"https://beautiful-soup-4.readthedocs.io/en/latest/" }
+    ],
+    medium: [
+      { q:"脚本跑到 requests.get(url) 这一行之后长时间没有任何输出，也没有报错。最可能的原因是？",
+        opts:["没有设置 timeout，程序在等一个不会来的响应","没有设置 status_code","没有写 requirements.txt","没有用 pandas"],
+        ans:0,
+        exp:"不设超时时 requests 会一直等对方响应，对方不回应就永久挂住。官方进阶指南专门有一节讲超时，建议显式传入：requests.get(url, timeout=10)。",
+        src:"https://requests.readthedocs.io/en/latest/user/advanced/" },
+      { q:"URL 写错了，服务器返回一个 404 页面。脚本没有任何报错，继续解析出一个空列表。加哪一行能让程序当场报错？",
+        opts:["resp.raise_for_status()","print(resp.text)","time.sleep(1)","print(resp.headers)"],
+        ans:0,
+        exp:"2xx 之外的状态码不会自动报错，requests 只是把错误页当成普通响应返回。raise_for_status() 会在这种情况下抛出 HTTPError，把「悄悄出错」变成「当场失败」。",
+        src:"https://requests.readthedocs.io/en/latest/user/quickstart/" },
+      { q:"你手上有两个稿件脚本，一个依赖 pandas 1.x，另一个依赖 pandas 2.x。最稳妥的做法是？",
+        opts:["给每个项目各建一个虚拟环境，分别安装各自的版本","都装到全局环境，后装的覆盖前面的","只装最新版，把旧脚本改到能跑","把 pandas 的源码复制进项目文件夹"],
+        ans:0,
+        exp:"官方教程正是用这种版本冲突的例子说明：两个应用要求不同版本时无法共存于同一环境，所以每个项目应使用自己的虚拟环境。全局覆盖会让另一个项目在某天突然崩掉。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/venv.html" }
+    ],
+    hard: [
+      { q:"编辑让你抓某个公开新闻站 30 条标题。下面哪一种做法越界了？",
+        opts:["先读 robots.txt，被 Disallow 的路径不抓","在请求头里写明 User-Agent，表明抓取方身份","在 for 循环里一秒钟请求 200 次，不设任何间隔","只保存标题与链接，不保存正文与任何个人信息"],
+        ans:2,
+        exp:"robots.txt 是服务方以标准形式（RFC 9309）表达的访问策略，遵守它是底线；但标注允许抓取不等于允许无节制地打。高频无间隔的请求会挤占对方服务器资源，形同攻击，标准之外还有职业自律：用 time.sleep(1) 把节奏压到人类尺度。",
+        src:"https://www.rfc-editor.org/rfc/rfc9309.html" },
+      { q:"某个抓 50 条链接的脚本：既会卡在没响应的链接上，又会在碰到 404 时悄悄解析出空结果。要同时解决这两个问题，正确的改法是？",
+        opts:["requests.get(url, timeout=10) 并且紧跟 resp.raise_for_status()","requests.get(url) 并且多打印几次 resp.text","requests.get(url, timeout=10) 并且加一句 time.sleep(1)","requests.get(url, headers=...) 并且打印 resp.status_code"],
+        ans:0,
+        exp:"这是两个不同的问题：timeout 负责不让程序永久卡住，raise_for_status() 负责让 4xx / 5xx 立刻暴露成异常。少任何一个都还会留下一个坑 —— 打印状态码只是给人看，程序该继续错下去。",
+        src:"https://requests.readthedocs.io/en/latest/user/advanced/" },
+      { q:"关于「抓取公开数据」这件事，下面哪一句是<b>错的</b>？",
+        opts:["robots.txt 是服务方表达「哪些内容可被抓」的机器可读约定","只抓无需登录的公开内容，不采集个人信息","只要能被人用浏览器打开，抓它就不存在任何法律或伦理问题","动手前应读一遍网站使用条款，确认允许的抓取与使用范围"],
+        ans:2,
+        exp:"「可访问」不等于「可任意抓取与使用」。《数据新闻手册》特别提醒：抓取可能侵犯个人隐私、触犯数据保护法规，页面的使用条款与版权也会另行设限，而且这些限制往往写在看不见的细则里。",
+        src:"https://datajournalism.com/read/handbook/one/getting-data/getting-data-from-the-web" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

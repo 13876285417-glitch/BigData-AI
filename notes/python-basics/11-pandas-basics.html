@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 11 课 · NumPy 与 pandas 入门 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="10-third-party-and-web.html">← 上一课</a>
+  <a href="12-pandas-advanced.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 11 课 · NumPy 与 pandas 入门 · 一分钟掌握</h1>
+  <div class="sub">拿到一份数据，先给它做一次体检</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段四 · 第 11 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">data_profile.ipynb</code>
+  —— 一份数据体检报告：多少行多少列、哪些列有空值、极值出现在哪里。<br>
+  <b>新闻场景：</b>读入一份政府公开数据（各区人口、空气质量或地铁客流），先做基本画像，再决定这条选题能不能做、要补哪一列数据。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 11 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"pandas 官方 · 10 分钟入门", why:"pandas 项目官方维护的最短入门指南，DataFrame 与 Series、head、describe、排序都以此为准", url:"https://pandas.pydata.org/docs/user_guide/10min.html" },
+    { name:"pandas 官方 · 数据选择与筛选", why:"官方索引与筛选指南，布尔筛选、组合条件的写法与「括号为什么不能省」都在这一篇", url:"https://pandas.pydata.org/docs/user_guide/indexing.html" },
+    { name:"pandas 官方 · 数据读写（IO）", why:"read_csv / read_excel / to_csv 的官方用法与参数说明，读进来和写出去的标准做法", url:"https://pandas.pydata.org/docs/user_guide/io.html" },
+    { name:"pandas 官方 · 缺失值处理", why:"官方专门讲空值的一章，isna、dropna、fillna 的行为差异与注意事项", url:"https://pandas.pydata.org/docs/user_guide/missing_data.html" },
+    { name:"pandas 官方 · DataFrame.info 接口", why:"info() 的输出字段（列名、非空数量、数据类型、内存占用）的官方定义", url:"https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.info.html" },
+    { name:"NumPy 官方 · 快速入门", why:"NumPy 官方入门教程，数组的向量化运算与「不用写循环」的原始说明", url:"https://numpy.org/doc/stable/user/quickstart.html" },
+    { name:"NumPy 官方 · 绝对初学者指南", why:"面向零基础者的官方指南，用对比 Python 列表的方式解释为什么整列运算可以一次算完", url:"https://numpy.org/doc/stable/user/absolute_beginners.html" }
+  ],
+  points: [
+    { t:"<b>pandas 只有两种核心结构。</b><code>Series</code> 是一列带索引的数据；<code>DataFrame</code> 是一张有列名的二维表 —— 可以理解成「程序里的 Excel 表」。日常分析里你几乎所有的操作对象都是 DataFrame，只有取出单列时才会见到 Series。", s:0 },
+    { t:"<b>读数据用 <code>pd.read_csv(\"x.csv\")</code> 或 <code>pd.read_excel(\"x.xlsx\")</code>。</b>返回的就是一个 DataFrame，之后所有操作都在它身上做。官方 IO 指南里还有大量参数（分隔符、编码、指定工作表等），遇到「读进来串成一列」这类怪现象先回这一篇查。", s:2 },
+    { t:"<b>先看清结构，再看内容：<code>df.info()</code> 一次给出列名、每列的非空数量、每列的数据类型。</b>它最实用的地方是「非空数量」那一列 —— 某列非空数明显少于行数，就说明这列有缺失，必须在动手分析之前处理。", s:4 },
+    { t:"<b>快速体检三件套：<code>df.head()</code> 看前几行（确认读对了、列名对不对）、<code>df.info()</code> 看列与类型、<code>df.describe()</code> 看数值列的计数、均值、最值、四分位。</b>describe 里的 max 与 75% 差距异常时，往往就是极值或录入错误。", s:0 },
+    { t:"<b>选列要分清单中括号与双中括号：</b><code>df[\"人口\"]</code> 得到一列（Series），<code>df[[\"人口\", \"面积\"]]</code> 得到只含这两列的子表（DataFrame）。<b>少写一层中括号是新手最常见的笔误</b>，后面想对结果再做列操作时会突然报错。", s:1 },
+    { t:"<b>布尔筛选是 pandas 最核心的操作：<code>df[df[\"人口\"] &gt; 100000]</code> 取出人口大于十万的所有行。</b>组合条件必须用 <code>&amp;</code>（且）和 <code>|</code>（或），<b>并且每个条件都要用括号包起来</b> —— 比较运算符的优先级高于 & 和 |，不写括号会先算错再比较；也不能用 Python 的 <code>and</code> / <code>or</code>。", s:1 },
+    { t:"<b>整列运算不用写循环：</b><code>df[\"人均\"] = df[\"总额\"] / df[\"人数\"]</code> 会在整列上同时完成计算，这种「向量化」来自底层的 NumPy 数组，也是 pandas 比纯 Python 快得多的原因。<code>df.sort_values(\"人均\", ascending=False)</code> 再按结果降序，一眼就能看到极值落在哪个区。", s:5,
+      pre:"import pandas as pd\n\ndf = pd.read_csv(\"districts.csv\")   # 各区人口 / 面积 / 总额\n\ndf.head()                     # 前 5 行，确认读对了\ndf.info()                     # 列名 / 数据类型 / 每列非空数量\ndf.describe()                 # 数值列的计数、均值、最值、四分位\ndf.shape                      # (行数, 列数)\n\ndf[\"人均\"] = df[\"总额\"] / df[\"人数\"]         # 整列同时计算，不用写循环\ndf.sort_values(\"人均\", ascending=False)    # 降序看极值出现在哪个区\n\n# 布尔筛选：组合条件用 & / |，每个条件都要加括号\nbig = df[(df[\"人口\"] > 100000) & (df[\"面积\"] < 200)]\n\nprint(df.isna().sum())        # 每一列各有几个空值" },
+    { t:"<b>缺失值与重复值要单独处理：<code>df.isna().sum()</code> 逐列统计空值个数、<code>df.dropna()</code> 删掉含空值的行、<code>df.drop_duplicates()</code> 去重。</b>先统计再决定：空得少的列可以考虑补，空得多的列留着会误导统计，而重复行往往来自多次导出 —— 体检报告里必须写明各自有多少。", s:3 }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"同事发来一份「各区人口.csv」，读进 pandas 用哪个写法？",
+        opts:["pd.read_csv(\"各区人口.csv\")","pd.read_table(\"各区人口.csv\")","open(\"各区人口.csv\")","pd.load(\"各区人口.csv\")"],
+        ans:0,
+        exp:"read_csv 是读取逗号分隔文本表的官方入口，返回 DataFrame；read_table 默认以制表符分隔，读 CSV 会把整行挤成一列；open() 只拿到文件对象，不是表。",
+        src:"https://pandas.pydata.org/docs/user_guide/io.html" },
+      { q:"df.head() 的作用是什么？",
+        opts:["看前几行，快速确认数据读对了没有","看整张表的全部行","列出每列的数据类型","删除重复行"],
+        ans:0,
+        exp:"head() 默认给出前 5 行，是「读进来先看一眼」的标准动作：列名对不对、有没有串列、编码有没有乱，一眼就能发现。",
+        src:"https://pandas.pydata.org/docs/user_guide/10min.html" },
+      { q:"只想取出「人口」这一列，下面哪种写法得到的是 Series（单列）？",
+        opts:["df[\"人口\"]","df[[\"人口\"]]","df.人口[]","df.get(\"人口\")"],
+        ans:0,
+        exp:"单中括号取到一列 Series；双中括号 df[[\"人口\"]] 取到的是只含这一列的子表 DataFrame，形状不一样，后续能不能继续按列操作也不同。",
+        src:"https://pandas.pydata.org/docs/user_guide/indexing.html" }
+    ],
+    medium: [
+      { q:"df[df[\"人口\"] > 100000] 这一步在做什么？",
+        opts:["筛出人口大于十万的那些行","给人口列整列加上十万","统计人口列的总和","把人口列重命名为 100000"],
+        ans:0,
+        exp:"内层 df[\"人口\"] > 100000 生成一串 True / False，外层再用它把为 True 的行取出来 —— 这就是布尔筛选，pandas 里最常用的取数方式。",
+        src:"https://pandas.pydata.org/docs/user_guide/indexing.html" },
+      { q:"要筛「人口大于十万 且 面积小于 200」的区，哪个写法是对的？",
+        opts:["df[(df[\"人口\"] > 100000) & (df[\"面积\"] < 200)]","df[df[\"人口\"] > 100000 and df[\"面积\"] < 200]","df[df[\"人口\"] > 100000 & df[\"面积\"] < 200]","df.filter(人口 > 100000)"],
+        ans:0,
+        exp:"组合条件要用按位运算符 & 和 |，且每个条件单独加括号：比较运算符优先级高于 &，不写括号会先算错；用 Python 的 and 则会被当成对整列真假求值而报错。",
+        src:"https://pandas.pydata.org/docs/user_guide/indexing.html" },
+      { q:"统计各区「人均财政支出」，为什么不写 for 循环逐行算，而写 df[\"总额\"] / df[\"人数\"]？",
+        opts:["pandas 建在 NumPy 之上，整列运算是一次算完的向量化操作，比 Python 循环快得多","因为循环容易写错","因为 pandas 不允许写循环","因为循环会改坏原始数据"],
+        ans:0,
+        exp:"NumPy 的数组运算按元素批量执行，不需要解释器逐行调度，官方入门材料正是拿它和 Python 列表循环做对比来说明这一点。能用整列运算就尽量不用循环，也不用 apply。",
+        src:"https://numpy.org/doc/stable/user/absolute_beginners.html" }
+    ],
+    hard: [
+      { q:"政府公开数据里「空气质量」这一列有 12 个空值。动手清理之前，最该先搞清楚的是什么？",
+        opts:["空值代表「当天没监测」还是「当天的值就是 0」，再决定 dropna 还是 fillna","直接 fillna(0)，反正是数字列","直接 dropna()，空值一律删除最干净","把整列删掉，不做这一项分析"],
+        ans:0,
+        exp:"官方缺失值一章的核心提醒是：先判断缺失的含义再选处理方式。「没监测」和「值为 0」在空气质量上意义完全不同，填 0 会凭空造出一批「好天气」。",
+        src:"https://pandas.pydata.org/docs/user_guide/missing_data.html" },
+      { q:"df.isna().sum() 输出的到底是什么？",
+        opts:["每一列各自的空值个数","所有空值所在的行号","整张表是否为空","空值占全表的百分比"],
+        ans:0,
+        exp:"isna() 先把整张表变成 True / False（是否为空），sum() 再把 True 相加，于是每列得到该列空值的个数 —— 这是决定「删、补还是弃用该列」的依据。",
+        src:"https://pandas.pydata.org/docs/user_guide/missing_data.html" },
+      { q:"有同学写 df[[\"人口\", \"面积\"]] > 100000，想筛出两个字段都大于十万的行，结果报错。原因是什么？",
+        opts:["双中括号是「取这两列组成子表」，筛选必须写成布尔条件的组合 df[(...) & (...)]","必须先调用 loc 才能筛选","必须先 sort_values 排序","因为列名是中文，pandas 不支持"],
+        ans:0,
+        exp:"df[[\"人口\",\"面积\"]] 返回的是子表而不是条件；筛选要先用比较运算符生成 True / False 的布尔序列，再用 & 连接、每个条件加括号。中文列名完全合法，不是报错原因。",
+        src:"https://pandas.pydata.org/docs/user_guide/indexing.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 09 课 · 正则表达式与异常处理 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="08-file-io.html">← 上一课</a>
+  <a href="10-third-party-and-web.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 09 课 · 正则表达式与异常处理 · 一分钟掌握</h1>
+  <div class="sub">从乱稿里抽字段，而且坏数据不能拖垮整个程序</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段三 · 第 9 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">extract_info.py</code>
+  —— 输入文件夹 → 输出结构化 CSV + 错误日志：抽出日期、时间、金额、联系方式，坏稿跳过并记录原因。<br>
+  <b>新闻场景：</b>一批格式混乱的通稿里字段位置各不相同，用正则批量抽取，遇到异常稿件跳过而不是让整个脚本崩掉。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 9 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"官方 HOWTO · 正则表达式（从零讲起）", why:"字符类、量词、分组、贪婪与懒惰匹配的官方教学文档，是自学正则最权威的入门材料", url:"https://docs.python.org/zh-cn/3/howto/regex.html" },
+    { name:"官方文档 · re 模块（正则表达式操作）", why:"findall / search / sub / split 等接口的完整参考，逐一说明每个函数返回什么类型", url:"https://docs.python.org/zh-cn/3/library/re.html" },
+    { name:"官方教程 · 第 8 章「错误和异常」", why:"try / except / else / finally 的设计说明与官方示例，讲清「异常是怎么被处理的」", url:"https://docs.python.org/zh-cn/3/tutorial/errors.html" },
+    { name:"官方文档 · 内置异常清单", why:"ValueError、KeyError、IndexError、FileNotFoundError 等异常类型的官方定义与继承关系，是「该捕获哪一个」的判断依据", url:"https://docs.python.org/zh-cn/3/library/exceptions.html" }
+  ],
+  points: [
+    { t:"<b>三个最常用的入口：re.findall() 返回所有匹配组成的列表、re.search() 只找第一个匹配、re.sub() 做批量替换。</b>要从一段文字里「把所有的字段都取出来」用 findall；只想确认「有没有、第一个长什么样」用 search，它没匹配到时返回 <code>None</code>，所以取用前得先判断。", s:1 },
+    { t:"<b>最常用的元字符：\\d 匹配一个数字、\\w 匹配字母数字下划线、\\s 匹配空白、. 匹配任意一个字符。</b>它们都只匹配<b>一个</b>字符，要匹配一段就得配合量词；另外 <code>.</code> 默认<b>不匹配换行符</b>，需要跨行匹配时得另加标志。", s:0 },
+    { t:"<b>量词决定「重复几次」：* 零或多次、+ 一或多次、? 零或一次、{n} 恰好 n 次、{n,m} 在 n 到 m 次之间。</b>所以 <code>\\d{4}-\\d{2}-\\d{2}</code> 能匹配 2026-09-17 这样的日期。量词默认作用在它前面紧邻的那一个字符或分组上，写的时候别放错位置。", s:0 },
+    { t:"<b>方括号划出字符范围，圆括号把匹配结果分组。</b><code>[abc]</code> 匹配 a、b、c 中的任意一个，<code>[^abc]</code> 是它的反面（除了这三个之外都行）；<code>(\\d+)-(\\d+)</code> 里的两组圆括号会各记下一段结果，之后用 <code>group(1)</code>、<code>group(2)</code> 分别取出。竖线 <code>|</code> 表示「或者」。", s:0 },
+    { t:"<b>贪婪 vs 懒惰：.* 会尽可能多地吃字符，.*? 则尽量少匹配。</b>「为什么我的正则一下子匹配了一大段」几乎都出在这里 —— 写 <code>金额：.*元</code> 会一路吃到最后一个「元」，改成 <code>金额：.*?元</code> 才会在第一个「元」处停下。规则是：量词后面再加一个问号，就变成最短匹配。", s:0 },
+    { t:"<b>正则字符串一律加 r 前缀，写成原始字符串。</b><code>r\"\\d+\"</code> 里的反斜杠不会被 Python 先转义一次，正则引擎看到的正好是你写的那几个字符。不加 r 就得写成 <code>\"\\\\d+\"</code>，多一层反斜杠极易写错 —— 这也是官方推荐的写法。", s:0 },
+    { t:"<b>try 里只放可能出错的那一两行；except 负责接住异常，else 在没出错时执行，finally 无论成功失败都执行。</b>把读文件、清洗、统计、写出一整段都塞进 try，一旦出错你根本不知道是哪一行的问题，还会让不该被跳过的代码一起被跳过。finally 适合放「无论如何都要做」的收尾工作，比如关闭文件或写日志。", s:2 },
+    { t:"<b>要捕获具体异常类型，不要写裸 except。</b><code>except ValueError:</code> 只接住「值不合法」这一类，程序里真正的 bug（拼错名字、逻辑写反）依然会暴露出来；裸 except 会把它们一起吞掉，问题被隐藏到更难排查的地方。常见类型：<code>ValueError</code> 值不合法、<code>KeyError</code> 字典没有这个键、<code>IndexError</code> 下标越界、<code>FileNotFoundError</code> 文件不存在。", s:3,
+      pre:"import re\n\nLINE = \"2026-09-17 14:30 记者张三 稿费 3,200 元\"\n\n# 分组：括号把匹配切成几段，分别取出\nm = re.search(r\"(\\d{4}-\\d{2}-\\d{2})\\s+(\\d{2}:\\d{2})\", LINE)\nprint(m.group(1), m.group(2))              # 2026-09-17 14:30\n\n# 懒惰量词：.*? 在第一个「元」处就停下\nprint(re.search(r\"稿费 (.*?) 元\", LINE).group(1))   # 3,200\n\n# 只保护可能出错的那一行，并捕获具体异常\nfor raw in [\"3200\", \"三千二\"]:\n    try:\n        print(int(raw))\n    except ValueError as e:\n        print(\"跳过这条脏数据：\", e)" }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"想一次拿到一段通稿里出现的所有日期，用哪个函数最直接？",
+        opts:["re.findall(pattern, text)","re.search(pattern, text)","re.sub(pattern, text)","re.split(pattern, text)"],
+        ans:0,
+        exp:"findall 返回的是「所有不重叠匹配」组成的列表，拿来统计或逐条处理最省事。search 只返回第一个匹配（Match 对象，没匹配到则是 None），要拿到全部还得自己循环。",
+        src:"https://docs.python.org/zh-cn/3/library/re.html" },
+      { q:"正则里的 \\d 匹配什么？",
+        opts:["任意一个字符","一个数字字符","一个空白字符","一个字母"],
+        ans:1,
+        exp:"\\d 匹配一个十进制数字（等价于 [0-9]）。对比记忆：\\w 匹配字母、数字与下划线，\\s 匹配空白（空格、制表、换行），想匹配任意一个字符用 .（默认不匹配换行符）。",
+        src:"https://docs.python.org/zh-cn/3/howto/regex.html" },
+      { q:"写正则时在字符串前加 r（例如 r\"\\d+\"），目的是什么？",
+        opts:["让匹配速度更快","让反斜杠不被 Python 先转义一次，正则看到的就是你写的那几个字符","表示区分大小写","把匹配结果转成原始字符串类型"],
+        ans:1,
+        exp:"r\"...\" 是原始字符串，里面的反斜杠不具转义含义，正则引擎收到的正是 \\d 这样的字符。不写 r 就得写成 \"\\\\d+\"，多一层反斜杠很容易写漏，所以官方推荐一律加 r 前缀。",
+        src:"https://docs.python.org/zh-cn/3/howto/regex.html" }
+    ],
+    medium: [
+      { q:"一行文本是「2026-09-17 14:30 记者张三」，想分别取出日期和时间两段，最合适的写法是？",
+        opts:["用两个模式分别跑一次 findall","用一个带分组的模式 (\\d{4}-\\d{2}-\\d{2})\\s+(\\d{2}:\\d{2})，再用 group(1)、group(2) 取","用 re.sub 把中间的空格替换掉","用 .split() 按空格切分后取前两段"],
+        ans:1,
+        exp:"圆括号把正则里的一部分「记下来」，匹配成功后可以用 group(1)、group(2) 按括号出现的顺序分别取出，比跑两遍更省事也更少出错。split 依赖分隔符的稳定性，遇到多余空格就会错位。",
+        src:"https://docs.python.org/zh-cn/3/howto/regex.html" },
+      { q:"从通稿里抓金额，写了 r\"金额：.*元\"，结果把后面一大段都抓进来了。原因和改法是？",
+        opts:["因为 . 不匹配数字，应该改成 \\d","因为 * 是贪婪的，应该用 .*? 让它尽量少匹配","因为少了 re.DOTALL 标志","因为字符串没加 r 前缀"],
+        ans:1,
+        exp:"* 和 + 默认是贪婪的：能多吃就多吃，所以 .* 会一路匹配到最后一个「元」。在量词后面加一个问号就变成非贪婪（最短匹配），.*? 在第一个「元」处就停下 —— 这是「正则匹配了一大段」最常见的根因。",
+        src:"https://docs.python.org/zh-cn/3/howto/regex.html" },
+      { q:"处理一批稿件时，某几份的金额字段是「三千二」这种中文写法，int() 转换会失败。最稳妥的做法是？",
+        opts:["把读文件、清洗、转换、写 CSV 整段流程都放进 try，出错就整份跳过","只把 int() 转换那一行放进 try，捕获 ValueError，其余逻辑照常写","不加 try，让程序直接报错停下，人工解决","用裸 except 把所有异常都吞掉，统一记成 0"],
+        ans:1,
+        exp:"try 块越大，出错时你越不知道是哪一行的问题，也会连带跳过本不该跳过的代码。官方示例的做法是把受保护的范围缩到最小：只包住真正可能抛异常的那一两行，并写清楚捕获哪一种异常。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/errors.html" }
+    ],
+    hard: [
+      { q:"关于异常处理，下面哪一条说法是错的？",
+        opts:["except ValueError: 只捕获「值不合法」这一类错误","裸 except: 会把程序里真正的 bug 一起吞掉，让问题被隐藏","finally 里的代码无论是否发生异常都会执行","try 块里某一行抛异常后，会从它的下一行继续往下执行"],
+        ans:3,
+        exp:"异常抛出后，try 块里该行之后的语句不会再执行，控制权直接交给匹配的 except 分支，所以第 4 条是错的。finally 用来放「无论如何都要做」的收尾；捕获具体类型则是为了不误伤真正的 bug。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/errors.html" },
+      { q:"批量处理文件时，某个稿件文件根本不存在。下面哪个异常类型最该被单独捕获？",
+        opts:["ValueError","KeyError","FileNotFoundError","IndexError"],
+        ans:2,
+        exp:"FileNotFoundError 专门表示路径不存在，属于 OSError 家族。对照记：ValueError 是值不合法（例如 int(\"三千二\")），KeyError 是字典里没有这个键，IndexError 是序列下标越界。分门别类地捕获，日志才能告诉你是哪种脏数据。",
+        src:"https://docs.python.org/zh-cn/3/library/exceptions.html" },
+      { q:"一段代码在 try 里先 re.search 再取 m.group(1) 转 int，except 后面不写类型（裸 except），失败时把金额记成 0。为什么说它会吞掉 bug？",
+        opts:["因为没匹配上时 search 返回 None，None.group(1) 会抛 AttributeError，裸 except 把它和真正的转换错误混在一起，日志里只剩一个 0","因为它没有写 finally 语句","因为正则字符串没有加 r 前缀","因为它用了 search 而不是 findall"],
+        ans:0,
+        exp:"字段缺失导致没匹配上，是数据层面的正常情况，此时 search 返回 None，直接取 group 会抛 AttributeError；而金额格式异常抛的是 ValueError，两者性质完全不同。裸 except 把这两种情况都变成「金额 = 0」，你就再也看不出到底是字段没抽到还是数字格式不对。更好的写法是先判断 if m is None 并单独记日志，再对 int() 捕获 ValueError。",
+        src:"https://docs.python.org/zh-cn/3/library/exceptions.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

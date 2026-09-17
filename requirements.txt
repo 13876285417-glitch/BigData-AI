@@ -1,0 +1,16 @@
+# 运行环境：Python 3.12.10
+# 安装方式：python -m pip install -r requirements.txt
+# 国内加速：已配置清华源 https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+
+# —— 第 1 课需要（Notebook 运行环境）——
+ipykernel>=6.29
+packaging>=24.0
+notebook>=7.0
+
+# —— 后续课程将用到（暂未安装，届时取消注释）——
+# pandas>=2.2          # 表格数据处理
+# matplotlib>=3.9      # 数据可视化（中文图表）
+# jieba>=0.42          # 中文分词，新闻文本处理常用
+# requests>=2.32       # 网页数据抓取
+# beautifulsoup4>=4.12 # HTML 解析，配合新闻网页抓取
+# wordcloud>=1.9       # 词云图

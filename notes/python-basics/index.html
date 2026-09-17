@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 基础 · 课程目录（13 次课）</title>
+<style>
+  :root{
+    --bg:#F4F6F9; --card:#FFFFFF; --card2:#FAFBFC;
+    --ink:#12161C; --ink2:#39404E; --muted:#68707F; --line:#E3E7ED;
+    --blue:#0C447C; --blue-s:#E6F1FB;
+    --teal:#085041; --teal-s:#E1F5EE;
+    --amber:#633806; --amber-s:#FAEEDA;
+    --purple:#3C3489; --purple-s:#EEEDFE;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -16px rgba(16,24,40,.18);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.75;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.86em;background:var(--blue-s);color:#1F47B8;padding:1px 6px;border-radius:5px}
+  a{color:#2A5CE0}
+
+  header.hero{background:var(--card);border-bottom:1px solid var(--line);padding:52px 0 36px;margin-bottom:32px}
+  header.hero .wrap{padding-bottom:0}
+  .eyebrow{display:inline-block;font-size:12.5px;font-weight:600;letter-spacing:.08em;color:var(--blue);
+    background:var(--blue-s);padding:5px 12px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:clamp(28px,4.2vw,40px);line-height:1.25;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+  .lede{font-size:16px;color:var(--ink2);max-width:800px;margin:0 0 24px}
+  .stats{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:22px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;min-width:130px}
+  .stat .n{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+  .stat .l{font-size:12.5px;color:var(--muted)}
+  .note{font-size:13.5px;color:var(--muted);background:var(--card2);border:1px dashed var(--line);
+    border-radius:12px;padding:12px 16px;max-width:860px}
+  .note b{color:var(--ink2)}
+
+  nav.sticky{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav.sticky .wrap{display:flex;align-items:center;gap:4px;padding-top:10px;padding-bottom:10px;overflow-x:auto}
+  nav.sticky a{font-size:13.5px;color:var(--ink2);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:8px}
+  nav.sticky a:hover{background:var(--blue-s);color:var(--blue)}
+  nav.sticky .fill{flex:1}
+  .pbar{display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .pbar .track{width:120px;height:6px;border-radius:999px;background:#E9ECF2;overflow:hidden}
+  .pbar .track i{display:block;height:100%;width:0;background:#2A5CE0;transition:width .35s}
+  .pbar .txt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  section{padding-top:50px}
+  .sec-kicker{font-size:12.5px;font-weight:700;letter-spacing:.1em;color:#2A5CE0;text-transform:uppercase}
+  h2{font-size:26px;margin:6px 0 8px;letter-spacing:-.015em;font-weight:800}
+  .sec-head p{margin:0 0 24px;color:var(--muted);font-size:14.5px;max-width:840px}
+
+  /* 阶段条 */
+  .stagerail{display:grid;gap:12px}
+  .srow{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+    display:flex;align-items:center;gap:14px;flex-wrap:wrap;box-shadow:var(--shadow)}
+  .srow .lbl{flex:0 0 168px;font-size:13px;font-weight:700}
+  .srow .pills{display:flex;gap:8px;flex-wrap:wrap;flex:1}
+  .pill{font-size:12.5px;text-decoration:none;color:var(--ink2);background:var(--card2);
+    border:1px solid var(--line);border-radius:999px;padding:4px 12px;white-space:nowrap}
+  .pill:hover{border-color:#C4D3F5;color:#2A5CE0;background:var(--blue-s)}
+  .pill b{font-weight:700;margin-right:4px;opacity:.75}
+
+  /* 能力链 */
+  .chains{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .chain{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .chain::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .chain.c1::before{background:#185FA5}.chain.c2::before{background:#0F6E56}
+  .chain.c3::before{background:#854F0B}.chain.c4::before{background:#534AB7}
+  .chain h3{margin:0 0 4px;font-size:16px}
+  .chain .sub{font-size:12.5px;color:var(--muted);margin:0 0 12px}
+  .steps{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px}
+  .steps a{text-decoration:none;color:var(--ink2);background:var(--card2);border:1px solid var(--line);
+    border-radius:8px;padding:3px 9px}
+  .steps a:hover{border-color:#C4D3F5;color:#2A5CE0}
+  .steps .ar{color:#B4B2A9;font-size:12px}
+
+  /* 课程行 */
+  .group{margin-bottom:26px}
+  .group > h3{font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+  .group > h3 .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .group > h3 span{font-size:12.5px;color:var(--muted);font-weight:400}
+  .item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;
+    margin-bottom:10px;box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:16px}
+  .item .num{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-weight:800;font-size:16px;flex:0 0 auto}
+  .item h4{margin:0 0 3px;font-size:16.5px}
+  .item h4 a{text-decoration:none;color:inherit}
+  .item h4 a:hover{color:#2A5CE0}
+  .item .desc{margin:0 0 10px;font-size:13.5px;color:var(--muted)}
+  .rel{display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+  .rel .line{display:flex;gap:8px;align-items:flex-start;flex-wrap:wrap}
+  .rel .k{flex:0 0 44px;color:var(--muted);padding-top:2px}
+  .rel .v{flex:1;display:flex;gap:6px;flex-wrap:wrap}
+  .rel .v a,.rel .v em{text-decoration:none;font-style:normal;border-radius:7px;padding:2px 8px;border:1px solid var(--line);background:var(--card2);color:var(--ink2)}
+  .rel .v a:hover{border-color:#C4D3F5;color:#2A5CE0}
+  .rel .v em{color:var(--muted);border-style:dashed}
+  .item .foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .open{text-decoration:none;font-size:13.5px;font-weight:600;color:#2A5CE0;background:var(--blue-s);
+    border:1px solid #D7E1FB;border-radius:9px;padding:7px 14px}
+  .open:hover{background:#DCE7FD}
+  .check{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .check input{width:15px;height:15px;accent-color:#2A5CE0;cursor:pointer}
+  .check.done{color:#9AA1AE}
+
+  .table-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:13.6px}
+  th,td{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--card2);font-size:12.5px;letter-spacing:.04em;color:var(--muted);font-weight:700}
+  tr:last-child td{border-bottom:none}
+  td a{text-decoration:none}
+  td a:hover{text-decoration:underline}
+
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  button.reset{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;color:var(--ink2);cursor:pointer;font-family:inherit}
+  button.reset:hover{border-color:#C9D2E3;color:#2A5CE0}
+
+  @media (max-width:880px){
+    .chains{grid-template-columns:1fr}
+    .item{grid-template-columns:1fr}
+    .srow .lbl{flex:1 1 100%}
+  }
+  @media print{ nav.sticky{display:none} body{background:#fff} .item,.chain,.srow{box-shadow:none;break-inside:avoid} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">课程目录 · 新闻学方向</div>
+    <h1>Python 基础 · 13 次课</h1>
+    <p class="lede">
+      每一课对应一份独立的学习资料：<b>1 分钟速览核心要点 + 分层自适应自测</b>（答对升级、答错降级），
+      所有知识点都标注了官方来源，可以逐条溯源。这个页面负责把它们串起来，让你看清<b>概念之间的依赖关系</b>。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="n">13</div><div class="l">份学习资料</div></div>
+      <div class="stat"><div class="n">117</div><div class="l">道分层自测题</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">条能力链</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">个进度检查点</div></div>
+    </div>
+    <div class="note">
+      <b>怎么用：</b>先看下面的「四条能力链」了解这门课在训练什么能力，再从第 1 课往下走。
+      每份资料建议先用 1 分钟读完要点，再去答题 —— 答错会降级并给出提示，不用怕。
+      进度勾选与 <a href="learning-map.html">学习地图</a> 共用一份记录，勾哪边都一样。
+    </div>
+  </div>
+</header>
+
+<nav class="sticky">
+  <div class="wrap">
+    <a href="learning-map.html">学习地图</a>
+    <a href="#chains">能力链</a>
+    <a href="#stages">阶段速览</a>
+    <a href="#catalog">全部课程</a>
+    <a href="#matrix">依赖关系表</a>
+    <div class="fill"></div>
+    <div class="pbar">
+      <div class="track"><i id="barTop"></i></div>
+      <div class="txt" id="txtTop">0 / 13</div>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="chains">
+  <div class="sec-kicker">Concepts</div>
+  <h2>四条能力链</h2>
+  <p>13 课不是平铺的清单，而是四条互相交织的能力线。同一节课可能同时属于两条链 —— 这正是概念之间的联系。</p>
+  <div class="chains">
+    <div class="chain c1">
+      <h3>文本处理链</h3>
+      <p class="sub">新闻人的老本行：把文字当数据来切、洗、抽</p>
+      <div class="steps">
+        <a href="02-strings-text-processing.html">02 字符串</a><span class="ar">→</span>
+        <a href="09-regex-and-exceptions.html">09 正则</a><span class="ar">→</span>
+        <a href="10-third-party-and-web.html">10 网页取数</a>
+      </div>
+    </div>
+    <div class="chain c2">
+      <h3>数据结构链</h3>
+      <p class="sub">数据用什么装：从一条标题到一张表</p>
+      <div class="steps">
+        <a href="03-lists-and-tuples.html">03 列表</a><span class="ar">→</span>
+        <a href="04-dicts-and-sets.html">04 字典</a><span class="ar">→</span>
+        <a href="11-pandas-basics.html">11 pandas</a>
+      </div>
+    </div>
+    <div class="chain c3">
+      <h3>程序结构链</h3>
+      <p class="sub">让程序自己判断、自己循环、自己复用</p>
+      <div class="steps">
+        <a href="05-conditionals.html">05 条件</a><span class="ar">→</span>
+        <a href="06-loops.html">06 循环</a><span class="ar">→</span>
+        <a href="07-functions.html">07 函数</a><span class="ar">→</span>
+        <a href="08-file-io.html">08 文件</a>
+      </div>
+    </div>
+    <div class="chain c4">
+      <h3>数据能力链</h3>
+      <p class="sub">从表格里挖新闻：这门课的终点</p>
+      <div class="steps">
+        <a href="11-pandas-basics.html">11 pandas 入门</a><span class="ar">→</span>
+        <a href="12-pandas-advanced.html">12 分组合并</a><span class="ar">→</span>
+        <a href="13-visualization-project.html">13 可视化实战</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stages">
+  <div class="sec-kicker">Stages</div>
+  <h2>四个阶段速览</h2>
+  <p>点任意一课直接跳到它的卡片；再点卡片里的按钮进入学习资料。</p>
+  <div class="stagerail">
+    <div class="srow">
+      <div class="lbl" style="color:#0C447C">阶段一 · 上手<br><span style="font-weight:400;font-size:12px;color:var(--muted)">第 1–4 课 · 让代码跑起来</span></div>
+      <div class="pills">
+        <a class="pill" href="#l01"><b>01</b>环境与第一个程序</a>
+        <a class="pill" href="#l02"><b>02</b>字符串</a>
+        <a class="pill" href="#l03"><b>03</b>列表与元组</a>
+        <a class="pill" href="#l04"><b>04</b>字典与集合</a>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="lbl" style="color:#085041">阶段二 · 会写逻辑<br><span style="font-weight:400;font-size:12px;color:var(--muted)">第 5–8 课 · 让程序自己干活</span></div>
+      <div class="pills">
+        <a class="pill" href="#l05"><b>05</b>条件判断</a>
+        <a class="pill" href="#l06"><b>06</b>循环</a>
+        <a class="pill" href="#l07"><b>07</b>函数</a>
+        <a class="pill" href="#l08"><b>08</b>文件读写</a>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="lbl" style="color:#633806">阶段三 · 能用<br><span style="font-weight:400;font-size:12px;color:var(--muted)">第 9–10 课 · 对付真实数据</span></div>
+      <div class="pills">
+        <a class="pill" href="#l09"><b>09</b>正则与异常</a>
+        <a class="pill" href="#l10"><b>10</b>第三方库与网页</a>
+      </div>
+    </div>
+    <div class="srow">
+      <div class="lbl" style="color:#3C3489">阶段四 · 数据能力<br><span style="font-weight:400;font-size:12px;color:var(--muted)">第 11–13 课 · 从表格里挖新闻</span></div>
+      <div class="pills">
+        <a class="pill" href="#l11"><b>11</b>pandas 入门</a>
+        <a class="pill" href="#l12"><b>12</b>分组与合并</a>
+        <a class="pill" href="#l13"><b>13</b>可视化与实战</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="catalog">
+  <div class="sec-kicker">Catalog</div>
+  <h2>全部课程</h2>
+  <p>每张卡片标出「前置」（必须先学）和「解锁」（学完能接上什么），这就是概念之间的连接点。</p>
+
+  <div class="group">
+    <h3 style="color:#0C447C"><span class="dot" style="background:#185FA5"></span>阶段一 · 上手（第 1–4 课）<span>让代码跑起来，能装数据、看得懂报错</span></h3>
+
+    <div class="item" id="l01">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">01</div>
+      <div>
+        <h4><a href="01-environment-first-program.html">环境与第一个程序</a></h4>
+        <p class="desc">装好 Miniconda 与 VS Code，写出第一行代码，学会从容地看报错信息。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><em>无 · 这是起点</em></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l02">02 字符串</a><a href="#l03">03 列表</a><a href="#l04">04 字典</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="01-environment-first-program.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s1-1"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l02">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">02</div>
+      <div>
+        <h4><a href="02-strings-text-processing.html">字符串：把文字当数据处理</a></h4>
+        <p class="desc">索引与切片、split / join、strip / replace、f-string 格式化，把一段稿子洗干净。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l01">01 环境与第一个程序</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l05">05 条件判断</a><a href="#l08">08 文件读写</a><a href="#l09">09 正则提取</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="02-strings-text-processing.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s1-2"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l03">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">03</div>
+      <div>
+        <h4><a href="03-lists-and-tuples.html">列表与元组：一批数据怎么装</a></h4>
+        <p class="desc">增删改查、sort 与 sorted 的区别、切片反转、可变对象与复制的坑、元组为何不可变。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l01">01 环境与第一个程序</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l04">04 字典与集合</a><a href="#l06">06 循环</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="03-lists-and-tuples.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s1-3"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l04">
+      <div class="num" style="background:#E6F1FB;color:#0C447C">04</div>
+      <div>
+        <h4><a href="04-dicts-and-sets.html">字典与集合：给数据贴标签</a></h4>
+        <p class="desc">用键取值、get 与 KeyError 的区别、字典计数模式、列表套字典就是一张表、集合去重。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l03">03 列表与元组</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l06">06 循环统计</a><a href="#l11">11 pandas</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="04-dicts-and-sets.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s1-4"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h3 style="color:#085041"><span class="dot" style="background:#0F6E56"></span>阶段二 · 会写逻辑（第 5–8 课）<span>这门课的分水岭，过不了别往下走</span></h3>
+
+    <div class="item" id="l05">
+      <div class="num" style="background:#E1F5EE;color:#085041">05</div>
+      <div>
+        <h4><a href="05-conditionals.html">条件判断：让程序学会做选择</a></h4>
+        <p class="desc">if / elif / else 的短路顺序、and / or / not、Truthy 与 Falsy、is None、缩进即语法。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l02">02 字符串</a><a href="#l04">04 字典</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l06">06 循环</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="05-conditionals.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s2-5"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l06">
+      <div class="num" style="background:#E1F5EE;color:#085041">06</div>
+      <div>
+        <h4><a href="06-loops.html">循环：把重复劳动交给电脑</a></h4>
+        <p class="desc">for / while、range 左闭右开、break 与 continue、enumerate 与 zip、列表推导式。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l03">03 列表</a><a href="#l04">04 字典</a><a href="#l05">05 条件判断</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l07">07 函数</a><a href="#l11">11 pandas</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="06-loops.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s2-6"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l07">
+      <div class="num" style="background:#E1F5EE;color:#085041">07</div>
+      <div>
+        <h4><a href="07-functions.html">函数：把代码打包成工具</a></h4>
+        <p class="desc">def 与 return（返回 None 的陷阱）、默认参数的经典坑、作用域、docstring、import 与 main 入口。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l06">06 循环</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l08">08 文件读写</a><a href="#l10">10 第三方库</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="07-functions.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s2-7"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l08">
+      <div class="num" style="background:#E1F5EE;color:#085041">08</div>
+      <div>
+        <h4><a href="08-file-io.html">文件读写：让处理结果留下来</a></h4>
+        <p class="desc">with 语句与读写模式、utf-8 与中文乱码、CSV 与 JSON、用 pathlib 遍历整个文件夹。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l02">02 字符串</a><a href="#l07">07 函数</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l10">10 网页数据</a><a href="#l11">11 pandas</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="08-file-io.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s2-8"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h3 style="color:#633806"><span class="dot" style="background:#854F0B"></span>阶段三 · 能用（第 9–10 课）<span>面对格式混乱的真实稿件和真实网页</span></h3>
+
+    <div class="item" id="l09">
+      <div class="num" style="background:#FAEEDA;color:#633806">09</div>
+      <div>
+        <h4><a href="09-regex-and-exceptions.html">正则表达式与异常处理</a></h4>
+        <p class="desc">findall 与元字符、贪婪与懒惰、r 前缀、try/except 的粒度，让坏数据不拖垮整个程序。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l02">02 字符串</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l10">10 网页数据清洗</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="09-regex-and-exceptions.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s3-9"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l10">
+      <div class="num" style="background:#FAEEDA;color:#633806">10</div>
+      <div>
+        <h4><a href="10-third-party-and-web.html">第三方库与网页数据获取</a></h4>
+        <p class="desc">pip 与虚拟环境、requests 发请求、BeautifulSoup 解析、robots.txt 与抓取边界。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l08">08 文件读写</a><a href="#l09">09 正则</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l11">11 真实数据来源</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="10-third-party-and-web.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s3-10"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="group">
+    <h3 style="color:#3C3489"><span class="dot" style="background:#534AB7"></span>阶段四 · 数据能力（第 11–13 课）<span>从表格里挖新闻，这门课的终点</span></h3>
+
+    <div class="item" id="l11">
+      <div class="num" style="background:#EEEDFE;color:#3C3489">11</div>
+      <div>
+        <h4><a href="11-pandas-basics.html">NumPy 与 pandas 入门</a></h4>
+        <p class="desc">Series 与 DataFrame、体检三件套、布尔筛选、新增计算列、缺失值处理。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l04">04 字典</a><a href="#l06">06 循环</a><a href="#l08">08 文件读写</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l12">12 pandas 进阶</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="11-pandas-basics.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s4-11"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l12">
+      <div class="num" style="background:#EEEDFE;color:#3C3489">12</div>
+      <div>
+        <h4><a href="12-pandas-advanced.html">pandas 进阶：分组、合并与分析</a></h4>
+        <p class="desc">groupby 聚合、merge 与 concat、透视表、按时间汇总、导出带中文的 CSV。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l11">11 pandas 入门</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><a href="#l13">13 可视化</a></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="12-pandas-advanced.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s4-12"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="item" id="l13">
+      <div class="num" style="background:#EEEDFE;color:#3C3489">13</div>
+      <div>
+        <h4><a href="13-visualization-project.html">可视化与综合实战</a></h4>
+        <p class="desc">选对图型、中文字体乱码根治、savefig 必须在 show 之前、图表诚实性原则。</p>
+        <div class="rel">
+          <div class="line"><span class="k">前置</span><span class="v"><a href="#l12">12 pandas 进阶</a></span></div>
+          <div class="line"><span class="k">解锁</span><span class="v"><em>课程作品：一件数据新闻</em></span></div>
+        </div>
+        <div class="foot">
+          <a class="open" href="13-visualization-project.html">打开学习资料 →</a>
+          <label class="check"><input type="checkbox" data-k="s4-13"><span>已完成</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="matrix">
+  <div class="sec-kicker">Dependencies</div>
+  <h2>依赖关系表</h2>
+  <p>如果某节课听得很吃力，先回到它的「前置」课补一遍 —— 大概率是前面某个概念没吃透。另见 <a href="learning-map.html">13 课学习地图</a>。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:60px">课次</th><th style="width:230px">课程</th><th>前置（必须先学）</th><th>解锁（学完能接上）</th></tr></thead>
+      <tbody>
+        <tr><td><b>01</b></td><td><a href="01-environment-first-program.html">环境与第一个程序</a></td><td><em style="color:var(--muted)">无，这是起点</em></td><td>02 字符串 · 03 列表 · 04 字典</td></tr>
+        <tr><td><b>02</b></td><td><a href="02-strings-text-processing.html">字符串</a></td><td>01 环境与第一个程序</td><td>05 条件判断 · 08 文件读写 · 09 正则</td></tr>
+        <tr><td><b>03</b></td><td><a href="03-lists-and-tuples.html">列表与元组</a></td><td>01 环境与第一个程序</td><td>04 字典与集合 · 06 循环</td></tr>
+        <tr><td><b>04</b></td><td><a href="04-dicts-and-sets.html">字典与集合</a></td><td>03 列表与元组</td><td>05 条件判断 · 06 循环统计 · 11 pandas</td></tr>
+        <tr><td><b>05</b></td><td><a href="05-conditionals.html">条件判断</a></td><td>02 字符串 · 04 字典</td><td>06 循环</td></tr>
+        <tr><td><b>06</b></td><td><a href="06-loops.html">循环</a></td><td>03 列表 · 04 字典 · 05 条件判断</td><td>07 函数 · 11 pandas</td></tr>
+        <tr><td><b>07</b></td><td><a href="07-functions.html">函数</a></td><td>06 循环</td><td>08 文件读写 · 10 第三方库</td></tr>
+        <tr><td><b>08</b></td><td><a href="08-file-io.html">文件读写</a></td><td>02 字符串 · 07 函数</td><td>10 网页数据 · 11 pandas</td></tr>
+        <tr><td><b>09</b></td><td><a href="09-regex-and-exceptions.html">正则表达式与异常处理</a></td><td>02 字符串</td><td>10 网页数据清洗</td></tr>
+        <tr><td><b>10</b></td><td><a href="10-third-party-and-web.html">第三方库与网页数据获取</a></td><td>08 文件读写 · 09 正则</td><td>11 pandas 的真实数据来源</td></tr>
+        <tr><td><b>11</b></td><td><a href="11-pandas-basics.html">NumPy 与 pandas 入门</a></td><td>04 字典 · 06 循环 · 08 文件读写</td><td>12 pandas 进阶</td></tr>
+        <tr><td><b>12</b></td><td><a href="12-pandas-advanced.html">pandas 进阶</a></td><td>11 pandas 入门</td><td>13 可视化与综合实战</td></tr>
+        <tr><td><b>13</b></td><td><a href="13-visualization-project.html">可视化与综合实战</a></td><td>12 pandas 进阶</td><td>课程作品：一件数据新闻</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note" style="margin-top:20px">
+    <b>四个进度检查点：</b>第 4 课后能靠代码处理一批文字数据 → 第 8 课后能写出完整可复用的小脚本 →
+    第 10 课后能让数据自己到手 → 第 13 课后能完成一件数据新闻作品。过不了就别急着往下走，
+    完整说明见 <a href="learning-map.html#checkpoints">学习地图的检查点章节</a>。
+  </div>
+</section>
+
+<footer>
+  <div>Python 基础 · 课程目录 · 13 次课 &nbsp;|&nbsp; 生成于 2026-09-17</div>
+  <div>
+    <a href="learning-map.html" style="margin-right:14px">学习地图</a>
+    <button class="reset" id="resetBtn">清空进度记录</button>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('input[type="checkbox"][data-k]'));
+  var KEY='python-basics-progress-v1', store={};
+  try{ store=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ store={}; }
+
+  function render(){
+    var done=0;
+    boxes.forEach(function(b){
+      var on=!!store[b.getAttribute('data-k')];
+      b.checked=on;
+      var w=b.closest('.check'); if(w) w.classList.toggle('done',on);
+      var item=b.closest('.item');
+      if(item){
+        item.style.borderColor = on ? '#BFE3D5' : '';
+        item.style.background  = on ? '#FCFEFD' : '';
+      }
+      if(on) done++;
+    });
+    var total=boxes.length||1;
+    document.getElementById('barTop').style.width=Math.round(done/total*100)+'%';
+    document.getElementById('txtTop').textContent=done+' / '+boxes.length+' 已完成';
+  }
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      var k=b.getAttribute('data-k');
+      if(b.checked){store[k]=1;}else{delete store[k];}
+      try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){}
+      render();
+    });
+  });
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    store={};
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

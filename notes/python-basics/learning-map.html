@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python 基础学习地图 · 13 次课</title>
+<style>
+  :root{
+    --bg:#F4F6F9; --card:#FFFFFF; --card2:#FAFBFC;
+    --ink:#12161C; --ink2:#39404E; --muted:#68707F; --line:#E3E7ED;
+    --blue:#0C447C; --blue-s:#E6F1FB;
+    --teal:#085041; --teal-s:#E1F5EE;
+    --amber:#633806; --amber-s:#FAEEDA;
+    --purple:#3C3489; --purple-s:#EEEDFE;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(16,24,40,.04),0 10px 28px -16px rgba(16,24,40,.18);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.75;
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px 96px}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:.86em;background:var(--blue-s);color:#1F47B8;padding:1px 6px;border-radius:5px}
+  a{color:#2A5CE0}
+
+  header.hero{background:var(--card);border-bottom:1px solid var(--line);padding:56px 0 40px;margin-bottom:36px}
+  header.hero .wrap{padding-bottom:0}
+  .eyebrow{display:inline-block;font-size:12.5px;font-weight:600;letter-spacing:.08em;color:var(--blue);
+    background:var(--blue-s);padding:5px 12px;border-radius:999px;margin-bottom:18px}
+  h1{font-size:clamp(28px,4.2vw,40px);line-height:1.25;margin:0 0 14px;letter-spacing:-.02em;font-weight:800}
+  .lede{font-size:16px;color:var(--ink2);max-width:780px;margin:0 0 26px}
+  .stats{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+  .stat{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;min-width:132px}
+  .stat .n{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2}
+  .stat .l{font-size:12.5px;color:var(--muted)}
+  .note{font-size:13.5px;color:var(--muted);background:var(--card2);border:1px dashed var(--line);
+    border-radius:12px;padding:12px 16px;max-width:840px}
+  .note b{color:var(--ink2)}
+
+  nav.sticky{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+  nav.sticky .wrap{display:flex;align-items:center;gap:4px;padding-top:10px;padding-bottom:10px;overflow-x:auto}
+  nav.sticky a{font-size:13.5px;color:var(--ink2);text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:8px}
+  nav.sticky a:hover{background:var(--blue-s);color:var(--blue)}
+  nav.sticky .fill{flex:1}
+  .pbar{display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .pbar .track{width:120px;height:6px;border-radius:999px;background:#E9ECF2;overflow:hidden}
+  .pbar .track i{display:block;height:100%;width:0;background:#2A5CE0;transition:width .35s}
+  .pbar .txt{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  section{padding-top:52px}
+  .sec-kicker{font-size:12.5px;font-weight:700;letter-spacing:.1em;color:#2A5CE0;text-transform:uppercase}
+  h2{font-size:26px;margin:6px 0 8px;letter-spacing:-.015em;font-weight:800}
+  .sec-head p{margin:0 0 24px;color:var(--muted);font-size:14.5px;max-width:840px}
+
+  .phases{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .phase{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px 22px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+  .phase::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .phase.p1::before{background:#185FA5}.phase.p2::before{background:#0F6E56}
+  .phase.p3::before{background:#854F0B}.phase.p4::before{background:#534AB7}
+  .phase .tag{font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--muted)}
+  .phase h3{margin:4px 0 10px;font-size:17px}
+  .phase ol{margin:0;padding-left:20px;color:var(--ink2);font-size:13.5px}
+  .phase ol li{margin:3px 0}
+
+  .lesson{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+  .lhead{display:flex;gap:18px;padding:22px 24px 18px;border-bottom:1px solid var(--line);align-items:flex-start}
+  .badge{flex:0 0 auto;width:52px;height:52px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;line-height:1}
+  .badge small{font-size:9.5px;font-weight:600;letter-spacing:.06em;opacity:.8;margin-bottom:3px}
+  .badge b{font-size:20px}
+  .lhead .t{flex:1;min-width:0}
+  .lhead h3{margin:0 0 6px;font-size:19px;letter-spacing:-.01em}
+  .lhead .goal{margin:0;color:var(--ink2);font-size:14px}
+  .lhead .goal b{font-weight:700}
+  .hours{flex:0 0 auto;font-size:12px;color:var(--muted);background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:4px 11px;white-space:nowrap}
+  .lbody{padding:20px 24px 22px;display:grid;grid-template-columns:1.1fr 1fr;gap:26px}
+  .blk h4{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px;font-weight:700}
+  .blk + .blk{margin-top:20px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-size:12.5px;background:var(--card2);border:1px solid var(--line);color:var(--ink2);padding:3px 10px;border-radius:7px}
+  .chip.k{background:var(--blue-s);border-color:#D7E1FB;color:#1F47B8}
+  .box{border-radius:12px;padding:14px 16px}
+  .box .lbl{font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:6px}
+  .box p{margin:0;font-size:13.8px}
+  .box.scene{background:var(--amber-s);border:1px solid #F2E2C4}
+  .box.scene .lbl{color:var(--amber)} .box.scene p{color:#4A3A1E}
+  .box.out{background:var(--teal-s);border:1px solid #CDE9DF}
+  .box.out .lbl{color:var(--teal)} .box.out p{color:#14453A}
+  .list{margin:0;padding-left:18px;font-size:13.8px;color:var(--ink2)}
+  .list li{margin:4px 0}
+  .matlink{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13.5px;font-weight:600;
+    text-decoration:none;color:#2A5CE0;background:var(--blue-s);border:1px solid #D7E1FB;padding:8px 14px;border-radius:9px}
+  .matlink:hover{background:#DCE7FD}
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:13.8px;color:var(--ink2);padding:6px 0;cursor:pointer;user-select:none}
+  .check input{margin:5px 0 0;width:16px;height:16px;accent-color:#2A5CE0;flex:0 0 auto;cursor:pointer}
+  .check.done span{color:var(--muted);text-decoration:line-through;text-decoration-color:#C4CAD6}
+
+  .table-wrap{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:13.8px}
+  th,td{text-align:left;padding:12px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{background:var(--card2);font-size:12.5px;letter-spacing:.04em;color:var(--muted);font-weight:700}
+  tr:last-child td{border-bottom:none}
+
+  .warn{background:var(--amber-s);border:1px solid #F2E2C4;border-radius:var(--radius);padding:18px 22px}
+  .warn h3{margin:0 0 10px;font-size:16px;color:var(--amber)}
+  .warn ol{margin:0;padding-left:20px;font-size:14px;color:#4A3A1E}
+  .warn ol li{margin:6px 0}
+
+  footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;
+    display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  button.reset{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:13px;color:var(--ink2);cursor:pointer;font-family:inherit}
+  button.reset:hover{border-color:#C9D2E3;color:#2A5CE0}
+
+  @media (max-width:880px){
+    .phases,.lbody{grid-template-columns:1fr}
+    .lbody{gap:18px}
+  }
+  @media print{
+    nav.sticky{display:none}
+    body{background:#fff}
+    .lesson,.phase{box-shadow:none;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">学习地图 · 新闻学方向</div>
+    <h1>Python 基础 · 13 次课</h1>
+    <p class="lede">
+      这门课只做一件事：让你掌握<b>够用</b>的 Python 基础。不碰算法、不碰数学，每一节课的衡量标准都是
+      <b>你能不能写出一个真的能跑的小工具</b>。人工智能理论与应用放在后续课程，这里打的是它的地基。
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="n">13</div><div class="l">次课，每次约 90 分钟</div></div>
+      <div class="stat"><div class="n">4</div><div class="l">个阶段，逐级递进</div></div>
+      <div class="stat"><div class="n">13</div><div class="l">个能跑起来的脚本</div></div>
+      <div class="stat"><div class="n">~30h</div><div class="l">总投入（含课后练习）</div></div>
+    </div>
+    <div class="note">
+      <b>怎么用这份地图：</b>每一课都配了一份独立的学习资料（含 1 分钟速览 + 分层自适应自测），
+      点卡片里的「打开本课学习资料」即可跳转。<b>完整目录与概念关系图</b>见
+      <a href="index.html">index.html</a>。勾选框会记录你的进度，进度存在本机浏览器里。
+    </div>
+  </div>
+</header>
+
+<nav class="sticky">
+  <div class="wrap">
+    <a href="index.html">目录</a>
+    <a href="#overview">总览</a>
+    <a href="#stage1">阶段一</a>
+    <a href="#stage2">阶段二</a>
+    <a href="#stage3">阶段三</a>
+    <a href="#stage4">阶段四</a>
+    <a href="#checkpoints">检查点</a>
+    <a href="#pitfalls">避坑</a>
+    <div class="fill"></div>
+    <div class="pbar">
+      <div class="track"><i id="barTop"></i></div>
+      <div class="txt" id="txtTop">0 / 0</div>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<section id="overview">
+  <div class="sec-kicker">Route</div>
+  <h2>四个阶段</h2>
+  <p>不是按语法章节切的，是按「你能干成什么事」切的。前一阶段没过关，不要急着往后走。</p>
+  <div class="phases">
+    <div class="phase p1">
+      <div class="tag">阶段一 · 第 1–4 课</div>
+      <h3>上手：让代码跑起来</h3>
+      <ol>
+        <li>环境与第一个程序</li>
+        <li>字符串：把文字当数据处理</li>
+        <li>列表与元组：一批数据怎么装</li>
+        <li>字典与集合：给数据贴标签</li>
+      </ol>
+    </div>
+    <div class="phase p2">
+      <div class="tag">阶段二 · 第 5–8 课</div>
+      <h3>会写逻辑：让程序自己干活</h3>
+      <ol>
+        <li>条件判断：让程序学会做选择</li>
+        <li>循环：把重复劳动交给电脑</li>
+        <li>函数：把代码打包成工具</li>
+        <li>文件读写：让结果留下来</li>
+      </ol>
+    </div>
+    <div class="phase p3">
+      <div class="tag">阶段三 · 第 9–10 课</div>
+      <h3>能用：对付真实世界的数据</h3>
+      <ol>
+        <li>正则表达式与异常处理</li>
+        <li>第三方库与网页数据获取</li>
+      </ol>
+    </div>
+    <div class="phase p4">
+      <div class="tag">阶段四 · 第 11–13 课</div>
+      <h3>数据能力：从表格里挖出新闻</h3>
+      <ol>
+        <li>NumPy 与 pandas 入门</li>
+        <li>pandas 进阶：分组与合并</li>
+        <li>可视化与综合实战</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section id="stage1">
+  <div class="sec-kicker">Stage 01</div>
+  <h2>阶段一 · 上手（第 1–4 课）</h2>
+  <p>目标：代码能跑、报错能看懂、数据能装进来。这四节课结束后，你能靠代码处理一批文字数据。</p>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E6F1FB;color:#0C447C"><small>LESSON</small><b>01</b></div>
+      <div class="t">
+        <h3>环境与第一个程序</h3>
+        <p class="goal">装好工具，写出并跑通第一行代码，看懂报错在说什么。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 2h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">Miniconda + VS Code + Jupyter</span>
+          <span class="chip k">终端 cd / ls</span>
+          <span class="chip k">print 与注释</span>
+          <span class="chip k">变量与命名</span>
+          <span class="chip k">str / int / float / bool</span>
+          <span class="chip k">input 与类型转换</span>
+          <span class="chip k">读报错最后一行</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>故意写错变量名、少一个引号、少一个括号，抄下三种报错类型</li>
+            <li>把今天的日期写进一句话并打印出来</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>把一条新闻的标题、正文、发布时间分别装进变量，打印成一段格式规范的稿件抬头。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>hello_news.py</code>：输入标题与作者，自动输出规范署名行并统计字数。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s1-1"><span>已掌握：能独立建 notebook 并跑通，看到报错能说出是哪一类问题</span></label>
+        <a class="matlink" href="01-environment-first-program.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E6F1FB;color:#0C447C"><small>LESSON</small><b>02</b></div>
+      <div class="t">
+        <h3>字符串：把文字当数据处理</h3>
+        <p class="goal">切割、清洗、拼接一段稿子，不再靠手工复制粘贴。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 2h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">索引与切片 s[0:5]</span>
+          <span class="chip k">split / join</span>
+          <span class="chip k">strip / replace</span>
+          <span class="chip k">find / startswith</span>
+          <span class="chip k">in 成员判断</span>
+          <span class="chip k">len 统计</span>
+          <span class="chip k">f-string 格式化</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>统计一篇文章里「记者」「报道」各出现几次</li>
+            <li>把一段话里的全角空格全部替换掉</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>清洗一段采访摘录：去掉多余空行与空格、统一标点、切成短句、统计字数与句数。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>clean_text.py</code>：输入一段文字，输出去杂、分句、字数句数统计。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s1-2"><span>已掌握：能自如地切片和拆分字符串</span></label>
+        <a class="matlink" href="02-strings-text-processing.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E6F1FB;color:#0C447C"><small>LESSON</small><b>03</b></div>
+      <div class="t">
+        <h3>列表与元组：一批数据怎么装</h3>
+        <p class="goal">批量存标题、排序、取前几名，理解索引从 0 开始。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 2h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">列表增删改查</span>
+          <span class="chip k">sort / sorted</span>
+          <span class="chip k">切片与反转</span>
+          <span class="chip k">遍历</span>
+          <span class="chip k">in 判断</span>
+          <span class="chip k">元组不可变</span>
+          <span class="chip k">嵌套列表</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>把标题列表按「含不含数字」分成两个列表</li>
+            <li>手工建一个 5 行的嵌套列表当简易表格</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>把当天 20 条热点标题存成一个列表，去重、按字数排序、挑出最长的 5 条。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>title_list.py</code>：输出标题总数、最长最短标题、字数前 10 名。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s1-3"><span>已掌握：会切片，说得清列表和元组的区别</span></label>
+        <a class="matlink" href="03-lists-and-tuples.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E6F1FB;color:#0C447C"><small>LESSON</small><b>04</b></div>
+      <div class="t">
+        <h3>字典与集合：给数据贴标签</h3>
+        <p class="goal">把「一条新闻」变成有字段的记录，理解统计为什么非字典不可。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">键值对增删改查</span>
+          <span class="chip k">get 取默认值</span>
+          <span class="chip k">keys / values / items</span>
+          <span class="chip k">嵌套字典</span>
+          <span class="chip k">列表套字典</span>
+          <span class="chip k">集合去重与交并差</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>每条标题存成含标题、来源、字数、标签四个字段的字典，再组成列表</li>
+            <li>把分类关键词规则扩到每类 8–10 个</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>给 30 条标题按关键词归类，用字典统计每类条数与占比，排出一张选题结构表。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>tag_count.py</code>：分类计数 + 占比 + 排序报表。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s1-4"><span>已掌握：能用「列表套字典」表示一张表</span></label>
+        <a class="matlink" href="04-dicts-and-sets.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stage2">
+  <div class="sec-kicker">Stage 02</div>
+  <h2>阶段二 · 会写逻辑（第 5–8 课）</h2>
+  <p>整门课的分水岭。第 8 课结束后，你应该能独立写出一个完整、可复用、能处理真文件的小脚本。</p>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E1F5EE;color:#085041"><small>LESSON</small><b>05</b></div>
+      <div class="t">
+        <h3>条件判断：让程序学会做选择</h3>
+        <p class="goal">把发稿规矩写成代码，多重条件也不写乱。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 2h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">if / elif / else</span>
+          <span class="chip k">比较运算符</span>
+          <span class="chip k">and / or / not</span>
+          <span class="chip k">in 成员判断</span>
+          <span class="chip k">嵌套判断</span>
+          <span class="chip k">Truthy / Falsy</span>
+          <span class="chip k">缩进即语法</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>把自检规则从 3 条扩到 8 条，给每条标严重等级</li>
+            <li>加一条：正文里是否出现「独家」这类需谨慎使用的词</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>做一份发稿前自检：标题超长？含敏感词？缺时间地点要素？逐条给出提示。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>check_article.py</code>：一条能自动跑的发稿自检清单。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s2-5"><span>已掌握：嵌套判断能一层层讲清逻辑</span></label>
+        <a class="matlink" href="05-conditionals.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E1F5EE;color:#085041"><small>LESSON</small><b>06</b></div>
+      <div class="t">
+        <h3>循环：把重复劳动交给电脑</h3>
+        <p class="goal">100 条稿件一次处理完，掌握「遍历 → 判断 → 累加」三段式。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">for 遍历</span>
+          <span class="chip k">while</span>
+          <span class="chip k">range()</span>
+          <span class="chip k">break / continue</span>
+          <span class="chip k">enumerate / zip</span>
+          <span class="chip k">嵌套循环</span>
+          <span class="chip k">累加与计数</span>
+          <span class="chip k">列表推导式</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>用 while 写一个「输入 q 退出」的简易菜单</li>
+            <li>把一条 8 行的 for 循环改写成列表推导式</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>对 100 条标题逐条判断长度、按规则分类，最后输出一张汇总统计表。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>batch_process.py</code>：批量处理 + 统计汇总。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s2-6"><span>已掌握：能独立写出三段式骨架</span></label>
+        <a class="matlink" href="06-loops.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E1F5EE;color:#085041"><small>LESSON</small><b>07</b></div>
+      <div class="t">
+        <h3>函数：把代码打包成工具</h3>
+        <p class="goal">从「一堆脚本」变成「一个工具包」，说得出什么时候该抽函数。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">def 定义</span>
+          <span class="chip k">参数与默认参数</span>
+          <span class="chip k">return 返回值</span>
+          <span class="chip k">多返回值</span>
+          <span class="chip k">作用域</span>
+          <span class="chip k">文档字符串</span>
+          <span class="chip k">import 与模块</span>
+          <span class="chip k">main 入口</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>给每个函数写 docstring，写一个 main() 串起全部功能</li>
+            <li>同一功能写两版：带参数的和不带参数的，比较差别</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>把前六课写散的代码，重构成一个有四个函数的「新闻文本工具包」，能被反复调用。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>news_tools.py</code>：可被其他脚本导入的工具模块。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s2-7"><span>已掌握：100 行平铺代码能重构成 4 个可复用函数</span></label>
+        <a class="matlink" href="07-functions.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#E1F5EE;color:#085041"><small>LESSON</small><b>08</b></div>
+      <div class="t">
+        <h3>文件读写：让处理结果留下来</h3>
+        <p class="goal">批量读稿、结果存成表格，遇到乱码知道是编码问题。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">open 与 with</span>
+          <span class="chip k">读 / 写 / 追加模式</span>
+          <span class="chip k">read / readlines</span>
+          <span class="chip k">utf-8 与乱码</span>
+          <span class="chip k">csv 读写</span>
+          <span class="chip k">json 读写</span>
+          <span class="chip k">os / pathlib 遍历文件夹</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>结果同时存成 CSV 和 JSON</li>
+            <li>统计整个文件夹的总字数与平均字数</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>批量读取文件夹里 50 份稿件，清洗后把字数、句数、关键词统计写成 CSV，用 Excel 打开。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>batch_files.py</code> + 一份可直接交付的结果 CSV。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s2-8"><span>已掌握：独立完成「读文件 → 处理 → 写文件」</span></label>
+        <a class="matlink" href="08-file-io.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stage3">
+  <div class="sec-kicker">Stage 03</div>
+  <h2>阶段三 · 能用（第 9–10 课）</h2>
+  <p>从这里开始，你面对的不再是干净的教学数据，而是格式混乱的真实稿件和真实网页。</p>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#FAEEDA;color:#633806"><small>LESSON</small><b>09</b></div>
+      <div class="t">
+        <h3>正则表达式与异常处理</h3>
+        <p class="goal">从乱稿里抽字段，而且坏数据不能拖垮整个程序。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">re.findall / search / sub</span>
+          <span class="chip k">\d \w \s 元字符</span>
+          <span class="chip k">* + ? {n} 量词</span>
+          <span class="chip k">[] () | 分组</span>
+          <span class="chip k">贪婪与懒惰</span>
+          <span class="chip k">try / except / finally</span>
+          <span class="chip k">断点调试</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>写三个正则：手机号、日期、「数字 + 万元」金额</li>
+            <li>故意喂一个空文件，确认程序不会崩</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>从一批格式混乱的通稿里批量抽出日期、时间、金额、联系方式，遇到异常稿件跳过并记日志。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>extract_info.py</code>：输入文件夹 → 输出结构化 CSV + 错误日志。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s3-9"><span>已掌握：正则能自己查文档拼出来，坏数据不会拖垮程序</span></label>
+        <a class="matlink" href="09-regex-and-exceptions.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#FAEEDA;color:#633806"><small>LESSON</small><b>10</b></div>
+      <div class="t">
+        <h3>第三方库与网页数据获取</h3>
+        <p class="goal">让数据自己到手，同时清楚抓取的法律与伦理边界。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">pip / conda 安装</span>
+          <span class="chip k">虚拟环境</span>
+          <span class="chip k">requirements.txt</span>
+          <span class="chip k">requests 发请求</span>
+          <span class="chip k">状态码与 headers</span>
+          <span class="chip k">BeautifulSoup 解析 HTML</span>
+          <span class="chip k">定位标签与属性</span>
+          <span class="chip k">请求频率控制</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>换个站点重写解析逻辑，加上 User-Agent 与请求间隔</li>
+            <li>写一段话说明：什么数据可以抓，什么不能抓</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>抓取一个公开新闻列表页的标题与链接（30 条以内）存成 CSV。动手前先看 robots.txt 和网站使用条款。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>fetch_news.py</code> + 抓取结果 CSV。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s3-10"><span>已掌握：能排查「选择器写错」导致的抓空问题</span></label>
+        <a class="matlink" href="10-third-party-and-web.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stage4">
+  <div class="sec-kicker">Stage 04</div>
+  <h2>阶段四 · 数据能力（第 11–13 课）</h2>
+  <p>从表格里挖新闻。第 13 课结束，你手里会有一件完整的数据新闻作品，而不是一堆练习。</p>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#EEEDFE;color:#3C3489"><small>LESSON</small><b>11</b></div>
+      <div class="t">
+        <h3>NumPy 与 pandas 入门</h3>
+        <p class="goal">拿到一份数据，先给它做一次体检，看懂每个数字。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">Series 与 DataFrame</span>
+          <span class="chip k">read_csv / read_excel</span>
+          <span class="chip k">head / info / describe</span>
+          <span class="chip k">行列选择</span>
+          <span class="chip k">新增计算列</span>
+          <span class="chip k">布尔筛选</span>
+          <span class="chip k">排序</span>
+          <span class="chip k">缺失值与去重</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>用筛选回答三个具体问题，例如「超过 10 万人的区有几个」</li>
+            <li>找出数据里明显不合理的值，记录你的处理方式</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>读入一份政府公开数据（各区人口、空气质量或地铁客流），做基本画像：多少行、哪些列有空值、极值出现在哪。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>data_profile.ipynb</code>：一份数据体检报告。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s4-11"><span>已掌握：会用布尔条件筛选，看得懂 describe() 的每个数字</span></label>
+        <a class="matlink" href="11-pandas-basics.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#EEEDFE;color:#3C3489"><small>LESSON</small><b>12</b></div>
+      <div class="t">
+        <h3>pandas 进阶：分组、合并与分析</h3>
+        <p class="goal">把三张表拼起来，完整回答一个分析问题。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 3h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">groupby 分组聚合</span>
+          <span class="chip k">value_counts</span>
+          <span class="chip k">merge / concat</span>
+          <span class="chip k">透视表</span>
+          <span class="chip k">apply 自定义函数</span>
+          <span class="chip k">to_datetime 与按月统计</span>
+          <span class="chip k">缺失值填充</span>
+          <span class="chip k">导出结果</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>按月统计发文量与平均阅读量，找出异常月份</li>
+            <li>用透视表做一张「栏目 × 时段」的交叉表</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>把「稿件列表 + 阅读量 + 发布时间」三张表合并，分析不同栏目、不同时段的传播效果差异。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p><code>analysis.ipynb</code> + 五条可以直接写进稿子的发现。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s4-12"><span>已掌握：能用 groupby + merge 回答完整分析问题</span></label>
+        <a class="matlink" href="12-pandas-advanced.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="lesson">
+    <div class="lhead">
+      <div class="badge" style="background:#EEEDFE;color:#3C3489"><small>LESSON</small><b>13</b></div>
+      <div class="t">
+        <h3>可视化与综合实战</h3>
+        <p class="goal">做出你的第一件数据新闻：从取数到成稿。</p>
+      </div>
+      <div class="hours">90 分钟 + 课后 5h</div>
+    </div>
+    <div class="lbody">
+      <div class="blk">
+        <h4>核心知识点</h4>
+        <div class="chips">
+          <span class="chip k">折线 / 柱状 / 散点图</span>
+          <span class="chip k">标题与坐标轴标签</span>
+          <span class="chip k">图例</span>
+          <span class="chip k">中文字体乱码修复</span>
+          <span class="chip k">子图 subplots</span>
+          <span class="chip k">保存 PNG 与 dpi</span>
+          <span class="chip k">图表诚实性原则</span>
+        </div>
+        <div class="blk" style="margin-top:20px">
+          <h4>课后练习</h4>
+          <ul class="list">
+            <li>同一组数据用两种图表各画一次，说明哪种更不容易误导读者</li>
+            <li>检查自己的图：坐标轴起点、比例、样本量有没有标清楚</li>
+          </ul>
+        </div>
+      </div>
+      <div class="blk">
+        <div class="box scene">
+          <div class="lbl">新闻场景</div>
+          <p>围绕一个真问题——比如「过去五年这座城市的房价、地铁客流或空气质量怎么变的」——用公开数据做 2 张图配 400 字图说。</p>
+        </div>
+        <div class="box out" style="margin-top:14px">
+          <div class="lbl">当堂产出</div>
+          <p>完整 notebook + 图表 PNG + 一篇 800 字数据新闻初稿。</p>
+        </div>
+        <label class="check"><input type="checkbox" data-k="s4-13"><span>已掌握：独立跑通「取数 → 清洗 → 分组 → 出图 → 写稿」</span></label>
+        <a class="matlink" href="13-visualization-project.html">打开本课学习资料 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="checkpoints">
+  <div class="sec-kicker">Checkpoints</div>
+  <h2>四个进度检查点</h2>
+  <p>每到一个检查点，先用它判断自己是不是真的可以往下走。过不了就回上一阶段补，别硬撑。</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th style="width:110px">检查点</th><th>你应该能独立做到</th><th style="width:200px">自测方式</th></tr></thead>
+      <tbody>
+        <tr><td><b>第 4 课后</b></td><td>用代码处理一批文字数据：装进列表/字典、切开、统计出结果</td><td>把 30 条标题做成一张分类统计表</td></tr>
+        <tr><td><b>第 8 课后</b></td><td>写出一个完整可复用的小脚本：函数封装 + 文件读写</td><td>批量处理一个文件夹并输出 CSV</td></tr>
+        <tr><td><b>第 10 课后</b></td><td>让数据自己到手：抓取 + 清洗 + 存成表格</td><td>抓一个公开列表页并存成 CSV</td></tr>
+        <tr><td><b>第 13 课后</b></td><td>完成一件数据新闻作品：数据到成稿全流程</td><td>交出图 + 800 字稿</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="pitfalls">
+  <div class="sec-kicker">Watch out</div>
+  <h2>五条避坑提醒</h2>
+  <div class="warn">
+    <ol>
+      <li><b>别从数学和算法开始。</b>你不需要先学微积分才能用 Python。先用起来，遇到不懂的概念再回头补，效率高十倍。</li>
+      <li><b>别只看视频不动手。</b>代码是打字打会的。看 10 分钟视频，就要自己敲 20 分钟。</li>
+      <li><b>把 AI 当助教，不当答案机。</b>让它解释报错、出练习题、review 你的代码，但不要让它替你写作业。</li>
+      <li><b>别一次装一堆库。</b>用到什么装什么。<code>ModuleNotFoundError</code> 是所有人都会遇到的日常，不是你的问题。</li>
+      <li><b>报错先看最后一行。</b>倒数第一行告诉你错在哪一类，倒数第二行告诉你具体位置。90% 的问题在这一步就能定位。</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <div>Python 基础学习地图 · 13 次课 · 新闻学方向 &nbsp;|&nbsp; 生成于 2026-09-17</div>
+  <div>
+    <a href="index.html" style="margin-right:14px">返回目录</a>
+    <button class="reset" id="resetBtn">清空进度记录</button>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var boxes=[].slice.call(document.querySelectorAll('input[type="checkbox"][data-k]'));
+  var KEY='python-basics-progress-v1', store={};
+  try{ store=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ store={}; }
+
+  function render(){
+    var done=0;
+    boxes.forEach(function(b){
+      var on=!!store[b.getAttribute('data-k')];
+      b.checked=on;
+      var wrap=b.closest('.check'); if(wrap) wrap.classList.toggle('done',on);
+      if(on) done++;
+    });
+    var total=boxes.length||1;
+    document.getElementById('barTop').style.width=Math.round(done/total*100)+'%';
+    document.getElementById('txtTop').textContent=done+' / '+boxes.length+' 项已完成';
+  }
+  boxes.forEach(function(b){
+    b.addEventListener('change',function(){
+      var k=b.getAttribute('data-k');
+      if(b.checked){store[k]=1;}else{delete store[k];}
+      try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){}
+      render();
+    });
+  });
+  document.getElementById('resetBtn').addEventListener('click',function(){
+    store={};
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>

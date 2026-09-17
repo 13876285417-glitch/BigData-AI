@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 01 课 · 环境与第一个程序 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="02-strings-text-processing.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 01 课 · 环境与第一个程序 · 一分钟掌握</h1>
+  <div class="sub">装好工具、写出第一行代码、看懂报错在说什么 —— 这门课的地基</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段一 · 第 1 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">hello_news.py</code>
+  —— 输入标题与作者，自动输出规范署名行并统计字数。<br>
+  <b>新闻场景：</b>把一条新闻的标题、正文、发布时间分别装进变量，打印成一段格式规范的稿件抬头。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 1 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"Python 官方教程（简体中文）", why:"Python 官方维护的入门教程中文官方译本，所有示例都可在解释器里直接复现", url:"https://docs.python.org/zh-cn/3/tutorial/index.html" },
+    { name:"官方教程 · 第 3 章「Python 的非正式介绍」", why:"变量赋值、数值、字符串与注释的第一手定义，是官方对「变量是什么」的原始表述", url:"https://docs.python.org/zh-cn/3/tutorial/introduction.html" },
+    { name:"官方文档 · 内置函数", why:"print / input / len / type / int / str 的官方签名与行为说明，含返回值类型", url:"https://docs.python.org/zh-cn/3/library/functions.html" },
+    { name:"官方文档 · 内置类型", why:"布尔、整数、浮点、字符串的官方定义，含「bool 是 int 的子类」这一关键事实", url:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+    { name:"官方文档 · 安装与配置 Python", why:"官方各平台安装指引，用来确认解释器到底装好了没有", url:"https://docs.python.org/zh-cn/3/using/index.html" }
+  ],
+  points: [
+    { t:"<b>Python 是解释型语言。</b>代码写完不需要编译成机器码，交给解释器逐行执行。所以你能在 notebook 里一格一格地跑、立刻看到结果。", s:0 },
+    { t:"<b>变量是名字，不是盒子。</b>写 <code>title = \"某地暴雨\"</code> 的含义是「让 title 这个名字指向那个字符串对象」。Python 是动态类型：同一个名字先后可以指向不同类型的值，<b>类型跟着值走，不跟着名字走</b>。", s:1 },
+    { t:"<b>四种最常用的内置类型：</b><code>str</code>（文本）、<code>int</code>（整数）、<code>float</code>（小数）、<code>bool</code>（只有 <code>True</code> 和 <code>False</code>，<b>首字母必须大写</b>）。用 <code>type(x)</code> 查类型，用 <code>int()</code> / <code>str()</code> / <code>float()</code> 做转换。<code>bool</code> 在数值上属于 <code>int</code> 的子类。", s:3 },
+    { t:"<b>print() 负责输出，f-string 负责拼装。</b>print 的多个参数默认用空格连接；字符串前面加一个 f 就变成 f-string，可以把变量直接嵌进文本里：<code>f\"共 {len(title)} 字\"</code>。", s:2 },
+    { t:"<b>input() 永远返回字符串。</b>哪怕用户输入的是 <code>100</code>，你拿到的是 <code>\"100\"</code>，直接参与数学运算会报 TypeError。要计算必须先 <code>int()</code> 转换 —— 这是新手第一个高频坑。", s:2 },
+    { t:"<b>注释用 # 开头</b>，从 # 到行尾都被解释器忽略。注释写给未来的自己：解释「为什么这么写」，而不是「这行在做什么」。", s:1 },
+    { t:"<b>报错要倒着读。</b>最后一行的异常类型说明错在哪一类，倒数第二行给出出错的文件和行号。<code>NameError</code> = 这个名字还没被定义；<code>SyntaxError</code> = 语法本身写错了，解释器连第一行都没开始执行；<code>TypeError</code> = 类型不匹配，比如拿字符串去加整数。", s:0 },
+    { t:"<b>最小可运行片段</b>（可以直接贴进 notebook 跑）：", s:2,
+      pre:"title  = \"某地暴雨橙色预警\"\nauthor = \"记者 张三\"\n\n# f-string 把变量嵌进文本\nprint(f\"{title}　{author}　共 {len(title)} 字\")" }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"在 Python 里，input() 拿回来的值永远是什么类型？",
+        opts:["字符串 str","整数 int","浮点数 float","和用户输入内容一致，自动判断"],
+        ans:0,
+        exp:"官方说明是「读取一行输入，去掉行尾换行符，返回一个字符串」。想参与计算必须自己转换类型。",
+        src:"https://docs.python.org/zh-cn/3/library/functions.html" },
+      { q:"下面哪一组是 Python 里合法的布尔字面量？",
+        opts:["true / false","True / False","TRUE / FALSE","用 1 / 0 表示"],
+        ans:1,
+        exp:"Python 的布尔值写作 True 和 False，首字母大写；写成小写 true 会被当成一个未定义的名字，引发 NameError。",
+        src:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+      { q:"代码中 # 开头的这一行会被怎么处理？",
+        opts:["引发 SyntaxError","被解释器完全忽略","原样打印到屏幕","定义一个变量"],
+        ans:1,
+        exp:"注释从 # 开始直到行尾，解释器执行时会直接跳过它，只留给人看。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/introduction.html" }
+    ],
+    medium: [
+      { q:"先执行 name = input() 并输入 100，再执行 name + 1，会发生什么？",
+        opts:["得到 101","报 TypeError","得到字符串 \"1001\"","得到 100"],
+        ans:1,
+        exp:"input() 返回的是字符串 \"100\"，字符串与整数相加不合法，会抛 TypeError: can only concatenate str (not \"int\") to str。想计算要写 int(name) + 1。",
+        src:"https://docs.python.org/zh-cn/3/library/functions.html" },
+      { q:"type(True) 的结果是什么？",
+        opts:["<class 'bool'>","<class 'int'>","<class 'str'>","报错，True 不是对象"],
+        ans:0,
+        exp:"True 的类型是 bool。值得注意的是 bool 是 int 的子类，所以 True + 1 会得到 2 —— 但这不代表你该这么写。",
+        src:"https://docs.python.org/zh-cn/3/library/stdtypes.html" },
+      { q:"下面哪一行引发的是 SyntaxError（解释器连执行都开始不了）？",
+        opts:["print(\"hello\")","print(\"hello\"","print(事先没定义的名字)","1 + \"a\""],
+        ans:1,
+        exp:"少了右括号属于语法错误，解释器在解析阶段就会拒绝整个文件。第三项是 NameError，第四项是 TypeError —— 它们都要等到运行期才出现。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/index.html" }
+    ],
+    hard: [
+      { q:"关于 Python 变量的说法，哪一条是<b>错的</b>？",
+        opts:["变量是名字，它指向一个对象","同一个名字先后可以指向不同类型的数据","变量必须先声明类型才能赋值","变量不需要提前声明，赋值即创建"],
+        ans:2,
+        exp:"Python 是动态类型语言，变量只是名字，赋值时才建立绑定，从不要求声明类型。这一点与 C、Java 的心智模型完全不同，也是新手最容易带着旧习惯犯错的地方。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/introduction.html" },
+      { q:"执行 n = \"30\" 之后，再执行 m = int(n) + 5。m 的值与类型是？",
+        opts:["\"305\"，str","35，int","报错，字符串不能转整数","30，int"],
+        ans:1,
+        exp:"int(\"30\") 把字符串转成整数 30，加 5 得 35，类型是 int。注意 int(\"30.5\") 会报错，带小数点的字符串要用 float() 转换。",
+        src:"https://docs.python.org/zh-cn/3/library/functions.html" },
+      { q:"print(len(\"你好\")) 会输出什么？",
+        opts:["2","4","6","报错"],
+        ans:0,
+        exp:"len() 作用在字符串上返回的是「字符个数」，不是字节数。「你好」是两个字符，所以输出 2；只有在统计 UTF-8 存储字节数时才会是 6（每个汉字 3 字节）。",
+        src:"https://docs.python.org/zh-cn/3/library/functions.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>

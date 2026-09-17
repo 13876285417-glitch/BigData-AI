@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第 07 课 · 函数：把代码打包成工具 — 一分钟掌握</title>
+<style>
+  :root{--bg:#f7f8fa;--card:#fff;--ink:#1f2937;--muted:#6b7280;--accent:#2563eb;--acc2:#16a34a;--line:#e5e7eb;
+    --easy:#059669;--med:#d97706;--hard:#dc2626;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;padding:22px}
+  .wrap{max-width:860px;margin:0 auto}
+  header{background:linear-gradient(135deg,#1e3a8a,#2563eb);color:#fff;border-radius:16px;padding:20px 24px;margin-bottom:16px}
+  header h1{font-size:23px;font-weight:700}
+  header .sub{opacity:.92;font-size:14px;margin-top:5px}
+  .badges{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+  .badges span{background:rgba(255,255,255,.18);padding:2px 10px;border-radius:999px;font-size:12px}
+  h2{font-size:16px;margin:22px 0 9px;padding-left:10px;border-left:4px solid var(--accent)}
+  .src{background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:13px 16px}
+  .src h3{color:#c2410c;font-size:14px;margin-bottom:8px}
+  .src li{font-size:13px;margin:5px 0 5px 18px}
+  .src a{color:#ea580c;font-weight:600;text-decoration:none;word-break:break-all}
+  .src .why{color:var(--muted);font-size:12px}
+  .pt{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:9px;font-size:13.5px}
+  .pt b{color:#111827}
+  .pt code{background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px}
+  .pt pre{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-top:9px;
+    font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre;overflow-x:auto;color:#0f172a}
+  .tag{background:#e0e7ff;color:#4338ca;font-size:11px;padding:1px 7px;border-radius:999px;margin-left:6px;white-space:nowrap}
+  .tag a{color:#4338ca;text-decoration:none}
+  #stage{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:12px;flex-wrap:wrap;gap:8px}
+  .lvl-badge{font-weight:700;padding:4px 12px;border-radius:999px;color:#fff}
+  .l-easy{background:var(--easy)}.l-med{background:var(--med)}.l-hard{background:var(--hard)}
+  .qbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .qt{font-weight:700;font-size:15px;margin-bottom:12px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--line);border-radius:9px;cursor:pointer;font-size:13.5px;background:#fff}
+  .opt:hover{border-color:var(--accent)}
+  .opt.sel{border-color:var(--accent);background:#eff6ff}
+  .opt.ok{border-color:#16a34a;background:#f0fdf4}
+  .opt.no{border-color:#dc2626;background:#fef2f2}
+  .fb{font-size:13px;margin-top:10px;display:none;padding:10px 12px;border-radius:8px}
+  .fb.good{display:block;background:#f0fdf4;color:#166534}
+  .fb.bad{display:block;background:#fef2f2;color:#991b1b}
+  .fb a{color:inherit;font-weight:700}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:6px}
+  .btn{margin-top:14px;background:var(--accent);color:#fff;border:none;padding:9px 18px;border-radius:9px;font-size:14px;font-weight:600;cursor:pointer}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn.dark{background:#0f172a;margin-left:8px}
+  .card-big{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;display:none}
+  .card-big h3{font-size:20px}
+  .stat{color:var(--muted);font-size:13px;margin-top:8px}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin-top:20px;line-height:1.9}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600}
+  a.srclink{color:var(--accent);text-decoration:none;font-weight:600}
+  .navlink{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .navlink a{font-size:13px;text-decoration:none;color:var(--accent);background:#fff;border:1px solid var(--line);
+    padding:6px 13px;border-radius:9px;font-weight:600}
+  .navlink a:hover{border-color:var(--accent)}
+  .lessonmeta{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:10px;
+    font-size:13px;color:var(--ink)}
+  .lessonmeta b{color:#111827}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="navlink">
+  <a href="index.html">← 返回课程目录</a>
+  <a href="learning-map.html">查看 13 课学习地图</a>
+  <a href="06-loops.html">← 上一课</a>
+  <a href="08-file-io.html">下一课 →</a>
+</div>
+
+<header>
+  <h1>第 07 课 · 函数：把代码打包成工具 · 一分钟掌握</h1>
+  <div class="sub">从「一堆脚本」变成「一个工具包」，让写好的逻辑可以被反复调用</div>
+  <div class="badges"><span>⏱ 阅读约 60 秒</span><span>📚 附权威来源</span><span>🎯 分层自适应测验</span><span>📍 阶段二 · 第 7 / 13 课</span></div>
+</header>
+
+<h2>📚 来源 Sources（本材料的出处）</h2>
+<div class="src">
+  <h3>以下知识点来自这些权威来源：</h3>
+  <ul id="srcList"></ul>
+</div>
+
+<h2>① 核心要点（附来源标签）</h2>
+<div id="points"></div>
+
+<div class="lessonmeta">
+  <b>本课产出：</b><code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">news_tools.py</code>
+  —— 一个可被其他脚本导入的「新闻文本工具包」，包含四个函数，能被反复调用而不是复制粘贴。<br>
+  <b>新闻场景：</b>把前六课写散的代码（清洗标题、统计字数、抽关键词、生成署名行）重构成四个函数，放进一个模块。
+</div>
+
+<h2>② 分层自适应测验 · 答对升级 / 答错降级</h2>
+<div id="stage">
+  <span style="font-size:14px;font-weight:600">当前层级：</span><span id="lvlBadge" class="lvl-badge l-easy">基础</span>
+  <span style="font-size:13px;color:var(--muted)" id="progress"></span>
+</div>
+<div id="quizArea"></div>
+
+<div class="card-big" id="doneCard">
+  <h3 id="doneTitle"></h3>
+  <p id="doneMsg" class="stat"></p>
+  <div style="margin-top:16px">
+    <button class="btn" onclick="resetQuiz()">再来一轮</button>
+    <button class="btn dark" onclick="scrollToSources()">回看来源</button>
+  </div>
+</div>
+
+<footer>
+  生成于 2026-09-17 · 存放于 BigData-AI 仓库 <code style="background:#eff6ff;color:#1d4ed8;padding:1px 5px;border-radius:4px">notes/python-basics/</code><br>
+  本材料是「Python 基础 · 13 次课」中的第 7 课 &nbsp;·&nbsp; <a href="index.html">返回目录</a>
+</footer>
+</div>
+
+<script>
+/* ================= 数据配置区 ================= */
+const CONFIG = {
+  sources: [
+    { name:"官方教程 · 第 4 章「其他流程控制工具」（定义函数一节）", why:"def 语法、默认参数值、关键字参数、文档字符串的官方定义与示例，是「函数到底怎么传参、怎么返回」的第一手依据", url:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+    { name:"官方教程 · 第 6 章「模块」", why:"import 机制、from ... import ... 的官方说明，含 if __name__ == \"__main__\" 这一「既能导入又能直接运行」写法", url:"https://docs.python.org/zh-cn/3/tutorial/modules.html" },
+    { name:"官方文档 · 内置函数", why:"help()、len()、print() 等内置函数的官方签名与返回值说明，用来核对「返回 None」这类行为", url:"https://docs.python.org/zh-cn/3/library/functions.html" },
+    { name:"PEP 8 · Python 代码风格指南", why:"官方采纳的代码风格规范，明确规定函数名与变量名用小写加下划线、docstring 的书写约定", url:"https://peps.python.org/pep-0008/" },
+    { name:"官方参考 · 执行模型（命名与绑定）", why:"局部变量、全局变量与 global 语句的形式化定义，用来解释「函数里赋值到底改的是谁」", url:"https://docs.python.org/zh-cn/3/reference/executionmodel.html" }
+  ],
+  points: [
+    { t:"<b>def 函数名(形参): 定义函数，函数名(实参) 调用函数。</b>定义时括号里写的是形参 —— 只是占位符，还没有值；调用时传进去的是实参，按位置依次绑定到形参上。函数体必须整体缩进一级，函数定义本身不会执行函数体，只有调用时才执行。", s:0 },
+    { t:"<b>return 把结果交回调用方，print 只是把它显示在屏幕上。</b>两者最容易被混用：打印过的函数如果不 return，调用它拿到的就是 <code>None</code> —— 官方明确规定没有 return 的函数返回 None，所以 <code>n = count_words(t)</code> 之后拿 n 去做加法会报 TypeError。", s:2 },
+    { t:"<b>看似「返回多个值」，其实是先构造了一个元组再返回。</b><code>return len(t), t.count(\"的\")</code> 返回的是元组 <code>(6, 0)</code>，所以可以写成 <code>chars, des = stat(title)</code> 解包 —— 这是元组的解包语法，不是某种多返回值的特殊机制。", s:0 },
+    { t:"<b>默认参数值 def f(a, b=10) 让参数可选，但默认值只在函数定义时求值一次。</b>所以 <code>def f(note, notes=[])</code> 里的那个列表是<b>所有调用共享</b>的同一个对象，第二次调用会看到上一次留下的元素 —— 这是著名的可变默认值陷阱，惯用修法是默认写 <code>None</code>，进函数后再补。", s:0 },
+    { t:"<b>关键字参数让调用意图更清晰</b>：<code>f(b=1, a=2)</code> 不必再记参数的先后顺序，读代码的人一眼就知道哪个值给谁。它还能跳过前面有默认值的参数，只指定你关心的那一个。", s:0 },
+    { t:"<b>函数里给变量赋值，默认创建的是局部变量，函数外那个同名变量不会变。</b>要修改模块级变量必须显式写 <code>global</code>；但更好的做法是把新值 <code>return</code> 出去，让数据的流向在代码上一眼可见，而不是靠隐式的全局状态。", s:4 },
+    { t:"<b>函数第一行用三引号写 docstring 说明它做什么，help() 和编辑器都能直接读出来。</b>命名则按 PEP 8 的约定：函数名与变量名全部小写、单词之间用下划线，<code>clean_title</code> 而不是 <code>cleanTitle</code> —— 名字是可读性的一部分。", s:3 },
+    { t:"<b>import 模块 / from 模块 import 名字 让一个文件被另一个文件复用</b>，被导入的文件就是一个模块，里面的函数直接用名字调用。再加一行 <code>if __name__ == \"__main__\":</code>，同一个文件就既能被导入又不至于一导入就自动跑起主流程。", s:1,
+      pre:"# news_tools.py —— 可被其他脚本导入的工具模块\ndef clean_title(title, max_len=20):\n    \"\"\"去掉首尾空白、压掉多余空格；超过 max_len 就截断加省略号。\"\"\"\n    t = \" \".join(title.split())\n    return t if len(t) <= max_len else t[:max_len] + \"…\"\n\ndef word_count(text):\n    \"\"\"返回 (字符数, 句数) 组成的元组，调用处可直接解包。\"\"\"\n    return len(text), text.count(\"。\") + text.count(\"！\") + text.count(\"？\")\n\nif __name__ == \"__main__\":\n    print(clean_title(\"  某地   暴雨橙色预警  \"))\n    chars, sents = word_count(\"今天有雨。明天转晴！\")\n    print(f\"{chars} 字，{sents} 句\")" }
+  ],
+  /* 每层题目：q=题干, opts=选项数组, ans=正确选项下标(0起), exp=解析, src=该事实对应来源URL */
+  levels: {
+    easy: [
+      { q:"在 Python 里定义函数用哪个关键字？",
+        opts:["def","function","func","lambda"],
+        ans:0,
+        exp:"Python 用 def 定义函数（define 的缩写）。function 不是 Python 的关键字；lambda 只能创建一个只含单个表达式的匿名函数，写不了函数体里的多条语句和 docstring。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"写了个函数把统计结果逐条 print 出来，但函数里没有 return。把这个函数的调用结果赋给变量 r，r 是什么？",
+        opts:["报 SyntaxError","None","空字符串","最后一条被打的内容"],
+        ans:1,
+        exp:"官方规定：没有 return 语句的函数返回 None。print 只负责把内容显示到屏幕上，不产生返回值，所以 r 是 None，拿它去做 len() 或加法都会抛 TypeError。想拿到结果必须在函数里 return。",
+        src:"https://docs.python.org/zh-cn/3/library/functions.html" },
+      { q:"按 PEP 8 的约定，给「清洗标题」写函数，下面哪个函数名是规范的？",
+        opts:["cleanTitle","CleanTitle","clean_title","cleantitle"],
+        ans:2,
+        exp:"PEP 8 规定函数名与变量名全部小写，单词之间用下划线分隔（俗称蛇形命名）。驼峰式的 cleanTitle 是其它语言的常见写法，在 Python 里用它会和整个生态的风格不一致，代码评审时通常会被要求改回来。",
+        src:"https://peps.python.org/pep-0008/" }
+    ],
+    medium: [
+      { q:"下面哪个函数定义踩了「可变默认值」这个经典陷阱？",
+        opts:["def f(a, b=10):","def f(a, b=None):","def f(a, items=[]):","def f(a, *args):"],
+        ans:2,
+        exp:"默认值只在函数定义时求值一次，所以 items=[] 这个列表在多次调用之间是同一个对象：第一次调用往里追加的内容，第二次调用还能看见。惯用修法是写成 items=None，进函数后再判断并为 None 时新建一个空列表。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"函数签名是 def price(base, rate=0.06)，下面哪种调用最清楚地表达「哪个值给哪个参数」，又不依赖参数顺序？",
+        opts:["price(100, 0.06)","price(base=100, rate=0.06)","price(rate=0.06)","price(100, rate=0.06, 3)"],
+        ans:1,
+        exp:"关键字参数把「哪个值给哪个参数」写在调用处，顺序换了也不影响，读代码的人不必回头翻函数定义。price(rate=0.06) 缺少没有默认值的 base，会抛 TypeError；位置参数写在关键字参数之后也是语法错误。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"你写好的「字数统计」逻辑想让另一个脚本也能用，最合适的做法是？",
+        opts:["把那几行复制粘贴到新脚本里","把逻辑写成一个函数放进模块，在新脚本里 import 进来用","在原来的脚本里定义全局变量，让新脚本读取","把代码放进 if __name__ 块里，用 exec 执行"],
+        ans:1,
+        exp:"模块就是官方设计的复用单位：把一个 .py 文件当模块 import 进来，里面的函数就能被反复调用，改一处则处处生效；复制粘贴会让同一份逻辑散落多处，改起来必然漏改。另外 __main__ 守卫保证被导入时不会顺带执行主流程。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/modules.html" }
+    ],
+    hard: [
+      { q:"有个函数写成 def stat(title): return len(title), title.count(\"的\")。执行 r = stat(\"暴雨橙色预警\") 之后，r 是什么？",
+        opts:["一个元组 (6, 0)","两个独立的变量","报错，函数不能返回两个值","字符串"],
+        ans:0,
+        exp:"逗号分隔的返回值其实是先构造了一个元组再返回，所以 r 是 (6, 0)。它不是「多个返回值」这种特殊机制，而是一个普通的不可变元组；需要时可以用 chars, des = stat(title) 一次解包成两个名字。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"函数定义是 def add_note(note, notes=[]):，函数体先 notes.append(note) 再 return notes。先 print(add_note(\"A\")) 再 print(add_note(\"B\"))，两次输出分别是什么？",
+        opts:["['A'] 和 ['B']","['A'] 和 ['A', 'B']","报错，默认参数不能用列表","两次都输出 []"],
+        ans:1,
+        exp:"默认值 [] 只在执行 def 那一行时创建一次，之后每次不传 notes 的调用都共用这一个列表对象，于是第二次调用会看到第一次留下的 \"A\"。默认参数值只在函数定义时求值一次，这正是可变对象不应当默认值的根本原因。",
+        src:"https://docs.python.org/zh-cn/3/tutorial/controlflow.html" },
+      { q:"关于函数里的作用域，下面哪种说法是正确的？",
+        opts:["函数内给某个变量赋值，改的就是函数外的同名变量","函数内给变量赋值默认创建局部变量，要改模块级变量必须先用 global 声明","函数内部读不到任何函数外定义的变量","只要写了 global，函数返回后该变量就一定会被打印出来"],
+        ans:1,
+        exp:"官方执行模型里，函数体中的赋值语句默认绑定到局部命名空间，函数外那个同名变量不受影响；要修改模块级变量必须在函数里显式写 global。不过更推荐把新值 return 出去 —— 显式的数据流向比隐式的全局状态更容易维护，也更少出 bug。",
+        src:"https://docs.python.org/zh-cn/3/reference/executionmodel.html" }
+    ]
+  }
+};
+
+/* ================= 自适应路由引擎 ================= */
+const LNAME={easy:"基础",medium:"进阶",hard:"挑战"};
+const CIRC=["①","②","③","④","⑤","⑥","⑦","⑧","⑨"];
+let level="easy", used={easy:[],medium:[],hard:[]}, total=0, right=0, hardStreak=0, mastered=false;
+
+function renderSources(){
+  document.getElementById("srcList").innerHTML=CONFIG.sources.map((s,i)=>
+    `<li><a href="${s.url}" target="_blank" rel="noopener">${s.name}</a>
+     <div class="why">权威性：${s.why}</div></li>`).join("");
+}
+function renderPoints(){
+  document.getElementById("points").innerHTML=CONFIG.points.map(p=>{
+    const src=CONFIG.sources[p.s];
+    const tag=`<span class="tag"><a href="${src.url}" target="_blank" rel="noopener">来源${CIRC[p.s]}</a></span>`;
+    const pre=p.pre?`<pre>${p.pre.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</pre>`:"";
+    return `<div class="pt">${p.t}${tag}${pre}</div>`;
+  }).join("");
+}
+function setBadge(){
+  const b=document.getElementById("lvlBadge");
+  b.textContent=LNAME[level];
+  b.className="lvl-badge l-"+(level==="easy"?"easy":level==="medium"?"med":"hard");
+}
+function pool(lev){return CONFIG.levels[lev].map((q,i)=>({q,i})).filter(x=>!used[lev].includes(x.i));}
+let curQ=null;
+function askStored(){
+  document.getElementById("doneCard").style.display="none";
+  let p=pool(level);
+  if(p.length===0){
+    const order=["easy","medium","hard"];
+    for(const lv of order){ if(pool(lv).length){ level=lv; setBadge(); p=pool(lv); break; } }
+  }
+  if(p.length===0){finish();return;}
+  const c=p[Math.floor(Math.random()*p.length)];
+  used[level].push(c.i);
+  curQ=c.q;
+  const letters=["A","B","C","D"];
+  document.getElementById("quizArea").innerHTML=
+   `<div class="qbox"><div class="qt">${curQ.q}</div>
+     <div class="opts">${curQ.opts.map((o,i)=>
+      `<label class="opt" data-i="${i}" onclick="answer(this,${i})">
+        <span style="font-weight:700;color:var(--accent)">${letters[i]}</span><span>${o}</span></label>`).join("")}
+     </div><div class="fb" id="fb"></div>
+     <button class="btn" id="nextBtn" style="display:none" onclick="askStored()">下一题 →</button></div>`;
+  updateProgress();
+}
+function answer(el,i){
+  total++;
+  document.querySelectorAll(".opt").forEach(o=>{o.style.pointerEvents="none";o.classList.remove("sel");});
+  const correct = i===curQ.ans;
+  const fb=document.getElementById("fb");
+  if(correct){
+    right++;
+    el.classList.add("ok");
+    if(level==="easy")level="medium";
+    else if(level==="medium")level="hard";
+    else {hardStreak++; if(hardStreak>=2)mastered=true;}
+    fb.className="fb good";
+    fb.innerHTML=`✅ 答对了！${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">查看来源 ↗</a>`;
+  } else {
+    el.classList.add("no");
+    hardStreak=0;
+    if(level==="hard")level="medium";
+    else if(level==="medium")level="easy";
+    fb.className="fb bad";
+    fb.innerHTML=`❌ 答错了，已降级。${curQ.exp} <a href="${curQ.src}" target="_blank" rel="noopener" class="srclink">回看来源 ↗</a>`;
+    if(level==="easy"){
+      fb.innerHTML+=`<div class="hint">提示：已回到基础层，建议先读上方核心要点与来源再继续。</div>`;
+    }
+  }
+  setBadge();
+  updateProgress();
+  const nb=document.getElementById("nextBtn");
+  nb.style.display="inline-block";
+  nb.textContent = mastered?"查看结果 →":"下一题 →";
+  if(mastered) nb.onclick=finish;
+  if(pool(level).length===0 && !mastered) nb.textContent="进入下一层 / 收尾 →";
+}
+function updateProgress(){
+  document.getElementById("progress").textContent=`已答 ${total} · 答对 ${right}`;
+}
+function finish(){
+  const d=document.getElementById("doneCard");
+  d.style.display="block";
+  const title=mastered?`🎯 掌握达成（最高「${LNAME.hard}」）`:`本轮结束（最高层级：${LNAME[level]}）`;
+  document.getElementById("doneTitle").textContent=title;
+  document.getElementById("doneMsg").textContent=`共答 ${total} 题，答对 ${right} 题。答对会自动升级难度，答错会降级提示，本机制帮你始终在“够得着”的难度练习。建议回看来源后再次挑战。`;
+  document.getElementById("quizArea").innerHTML="";
+}
+function resetQuiz(){
+  level="easy";used={easy:[],medium:[],hard:[]};total=0;right=0;hardStreak=0;mastered=false;curQ=null;
+  setBadge();updateProgress();askStored();
+}
+function scrollToSources(){document.querySelector(".src").scrollIntoView({behavior:"smooth"});}
+
+renderSources();renderPoints();setBadge();askStored();
+</script>
+</body>
+</html>
