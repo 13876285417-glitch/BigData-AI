@@ -104,25 +104,16 @@ pip config list          # 验证
 **检查与清理**：
 
 ```bash
-# 检查有哪些文件被污染
+# 1. 看有哪些文件被污染
 grep -rl "data-page-node-id" --include="*.html" .
 
-# 清理（只删该属性，不动其他内容；清理后务必校验标签是否仍闭合）
-python3 - <<'PY'
-import re
-from pathlib import Path
-P = re.compile(r'\s+data-page-node-id="[^"]*"')
-for f in Path(".").rglob("*.html"):
-    if ".venv" in f.parts: continue
-    s = f.read_text(encoding="utf-8")
-    n = len(P.findall(s))
-    if n:
-        f.write_text(P.sub("", s), encoding="utf-8")
-        print(f"{f}: 清理 {n} 处")
-PY
+# 2. 清理（只删该属性，不动其他内容）
+python3 .workbuddy/skills/coursework-submit/scripts/clean_page_node_id.py $(find . -name "*.html" -not -path "./.venv/*")
 ```
 
-清理后建议用 `html.parser` 复核一遍标签闭合，再提交。
+`clean_page_node_id.py` 在写回前会用 `html.parser` 比对清理前后的标签序列，
+**结构一旦不一致就跳过该文件不写回**，避免清理动作本身把文件改坏。
+清理完再用同样的思路复核一遍标签闭合即可。
 
 ## 五、提交前自查清单
 
